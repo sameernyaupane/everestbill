@@ -1,0 +1,29 @@
+/**
+ * Main CSS file
+ */
+
+#main-container > div:last-child {
+  margin-bottom: 30px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  padding-top: 20px;
+  color: #ccc;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #222;
+  border-color: #080808;
+}

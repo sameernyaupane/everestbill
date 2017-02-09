@@ -172,11 +172,12 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        EverestBill\Providers\AppServiceProvider::class,
+        EverestBill\Providers\AuthServiceProvider::class,
+        // EverestBill\Providers\BroadcastServiceProvider::class,
+        EverestBill\Providers\EventServiceProvider::class,
+        EverestBill\Providers\RouteServiceProvider::class,
+        Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
 
     ],
 

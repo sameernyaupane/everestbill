@@ -11,6 +11,22 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+/**
+ * Register Frontend Routes
+ */
+$router->group(['namespace' => 'Frontend'], function ($router) {
+
+    $router->get('/', function () {
+        return view('frontend.index');
+    })->name('frontend.index');
+
+    // Auth Routes
+    $router->group(['namespace' => 'Auth'], function ($router) {
+        $router->get('login', 'Login@getForm')->name('login.index');
+        $router->post('login', 'Login@postData');
+        $router->get('register', 'Register@getForm')->name('register.index');
+        $router->post('register', 'Register@postData');
+    });
+
 });
+
