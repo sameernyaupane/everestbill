@@ -28,13 +28,15 @@ class Login extends Controller
                     ->intended()
                     ->withSuccess('Login successful.');
             } else {
-                throw new Exception('An error occured while registering. Please try again.');
+                throw new Exception(
+                    'An error occured while registering. Please try again.'
+                );
             }
         } catch(Exception $e) {
             return $redirect
-            ->back()
-            ->withInput()
-            ->withError($e->getMessage());
+                ->back()
+                ->withInput()
+                ->withError($e->getMessage());
         } 
     }
 }

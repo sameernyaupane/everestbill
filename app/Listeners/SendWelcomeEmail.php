@@ -1,5 +1,4 @@
 <?php
-
 namespace EverestBill\Listeners;
 
 use Illuminate\Mail\Mailer;
@@ -44,6 +43,6 @@ class SendWelcomeEmail
     {
         $user = $this->user->findById($event->userId);
 
-        $this->mail->send(new Welcome($user));
+        $this->mail->to($user->email)->send(new Welcome($user));
     }
 }

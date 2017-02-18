@@ -26,7 +26,12 @@ $router->group(['namespace' => 'Frontend'], function ($router) {
         $router->post('login', 'Login@postData');
         $router->get('register', 'Register@getForm')->name('register.index');
         $router->post('register', 'Register@postData');
+        $router->get('activate/{code}', 'Register@activate')->name('register.activate');
     });
 
 });
 
+$router->get('test', function() {
+    $user = EverestBill\Models\User::find(12);
+    dd($user->activations);
+});

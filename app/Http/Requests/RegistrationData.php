@@ -25,7 +25,7 @@ class RegistrationData extends FormRequest
     {
         return [
             'full_name'             => ['required', 'min:3', 'max:64', 'Regex:/^[A-Za-z ]+$/'],
-            'email'                 => 'required|email',
+            'email'                 => 'required|email|unique:users',
             'password'              => 'required|min:5|max:32|same:password_confirmation',
             'password_confirmation' => 'required'
         ];

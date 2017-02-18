@@ -1,5 +1,4 @@
 <?php
-
 namespace EverestBill\Models;
 
 use Cartalyst\Sentinel\Users\EloquentUser as SentinelUser;

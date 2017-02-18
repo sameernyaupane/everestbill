@@ -53,7 +53,7 @@ return [
 
     'users' => [
 
-        'model' => 'KosmoBill\Models\User',
+        'model' => 'EverestBill\Models\User',
 
     ],
 
