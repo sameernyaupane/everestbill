@@ -36,10 +36,10 @@ class SendWelcomeEmail
     /**
      * Handle the event.
      *
-     * @param  UserRegistered  $event
+     * @param  UserRegistered|UserRegisteredThroughCustomerFlow  $event
      * @return void
      */
-    public function handle(UserRegistered $event)
+    public function handle($event)
     {
         $user = $this->user->findById($event->userId);
 

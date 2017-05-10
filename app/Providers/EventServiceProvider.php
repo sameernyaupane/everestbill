@@ -17,6 +17,10 @@ class EventServiceProvider extends ServiceProvider
             'EverestBill\Listeners\SendWelcomeEmail',
             'EverestBill\Listeners\SendActivationEmail',
         ],
+        'EverestBill\Events\UserRegisteredThroughCustomerFlow' => [
+            'EverestBill\Listeners\SendWelcomeEmail',
+            'EverestBill\Listeners\SendCompleteCheckoutEmail',
+        ],
     ];
 
     /**

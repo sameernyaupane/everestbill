@@ -1,10 +1,9 @@
 <?php
-
 namespace EverestBill\Http\Controllers\Frontend\Auth;
 
 use Exception;
-use Cartalyst\Sentinel\Sentinel;
 use Illuminate\View\Factory as View;
+use Cartalyst\Sentinel\Sentinel as Auth;
 use EverestBill\Http\Requests\LoginData;
 use EverestBill\Http\Controllers\Controller;
 use Illuminate\Routing\Redirector as Redirect;
@@ -18,12 +17,12 @@ class Login extends Controller
     
     public function postData(
         LoginData $request,
-        Sentinel $sentinel,
+        Auth $auth,
         Redirect $redirect
     )
     {
         try {
-            if($user = $sentinel->authenticate($request->all())) {
+            if($user = $auth->authenticate($request->all())) {
                 return $redirect
                     ->intended()
                     ->withSuccess('Login successful.');
