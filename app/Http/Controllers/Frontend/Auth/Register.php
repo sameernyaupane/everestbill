@@ -5,6 +5,7 @@ use Exception;
 use Illuminate\View\Factory as View;
 use EverestBill\Domains\CustomerFlow;
 use Illuminate\Session\SessionManager;
+use Cartalyst\Sentinel\Sentinel as Auth;
 use EverestBill\Domains\User as UserDomain;
 use EverestBill\Http\Controllers\Controller;
 use Illuminate\Routing\Redirector as Redirect;
@@ -20,29 +21,31 @@ class Register extends Controller
     }
     
     public function postData(
-        RegistrationData $request, 
+        Auth $auth,
         UserDomain $user,
         Redirect $redirect,
+        RegistrationData $request,
         CustomerFlow $customerFlow
     )
     {
         try {
-            $user->register($request->all()); 
+            $user = $user->register($request->all());
+
+            $auth->login($user);
 
             if ($customerFlow->isInSession()) {
                 $message = '
-                    Thanks! You are now registered. 
-                    Please check your email for a link to complete your order.
+                    Thanks! You are now registered and logged in. 
+                    Please continue with the checkout.
                 ';
             } else {
                 $message = '
-                    Thanks! You are now registered. 
-                    Please check your email to activate your account.
+                    Thanks! You are now registered.
                 ';
             }
 
             return $redirect
-                ->route('frontend.index')
+                ->route('dashboard.customer_flow.payment')
                 ->withSuccess($message);
 
         } catch(Exception $e) {

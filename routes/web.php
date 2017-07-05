@@ -45,7 +45,7 @@ $router->group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 
     $router->get('/', 'Dashboard@index')->name('dashboard.index');
 
     $router->get('complete-checkout', 'CustomerFlow@completeCheckout')->name('dashboard.complete_checkout');
-    $router->get('payment', 'CustomerFlow@payment')->name('customer_flow.payment');
+    $router->get('payment', 'CustomerFlow@payment')->name('dashboard.customer_flow.payment');
     $router->post('create-payment', 'CustomerFlow@createPayment')->name('customer_flow.create-payment');
     $router->post('execute-payment', 'CustomerFlow@executePayment')->name('customer_flow.execute-payment');
 

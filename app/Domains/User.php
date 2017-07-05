@@ -78,11 +78,7 @@ class User
 
         $this->activation->create($user);
 
-        if ($this->customerFlow->isInSession()) {
-            $event = new UserRegisteredThroughCustomerFlow($user->id);
-        } else {
-            $event = new UserRegistered($user->id);
-        }
+        $event = new UserRegistered($user->id);
 
         $this->event->fire($event);
 
