@@ -48,9 +48,7 @@ class Paypal
               "details":
               {
                 "subtotal": "2.00",
-                "shipping": "1.00",
                 "tax": "2.00",
-                "shipping_discount": "-1.00"
               }
             },
             "item_list":

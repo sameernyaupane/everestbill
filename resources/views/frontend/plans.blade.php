@@ -21,11 +21,18 @@
             </ul>
           </div>
           <div class="panel-footer">
-            <form method="post" action="{{ route('customerflow.add.plan') }}">
-              {{ csrf_field() }}
-              <input type="hidden" name="plan_id" value="{{ $plan->id }}">
-              <input type="submit" style="float:right;" class="btn btn-success" value="Order">
-            </form>
+            <div class="row">
+              <div class="price col-md-5">
+                ${{ $plan->pricing->monthly_price  }}/monthly
+              </div>
+              <div class="col-md-3 col-md-offset-4">
+                <form method="post" action="{{ route('customerflow.add.plan') }}">
+                  {{ csrf_field() }}
+                  <input type="hidden" name="plan_id" value="{{ $plan->id }}">
+                  <input type="submit" style="float:right;" class="btn btn-success" value="Order">
+                </form>
+              </div>
+            </div>
             <br clear="all">
           </div>
         </div>

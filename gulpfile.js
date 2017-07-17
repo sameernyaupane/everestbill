@@ -15,12 +15,18 @@ require('laravel-elixir-vue-2');
 
 elixir(mix => {
     // Copy all required CSS
+    mix.copy('resources/assets/frontend/css/main.css', 'public/frontend/css/main.css');
+    mix.copy('resources/assets/frontend/css/bootstrap.min.css', 'public/frontend/css/bootstrap.min.css');
+
     mix.copy('resources/assets/backend/adminlte-2.3.11/bootstrap/css/bootstrap.min.css', 'public/backend/bootstrap/css/bootstrap.min.css');
     mix.copy('resources/assets/backend/adminlte-2.3.11/plugins/jvectormap/jquery-jvectormap-1.2.2.css', 'public/backend/plugins/jvectormap/jquery-jvectormap-1.2.2.css');
     mix.copy('resources/assets/backend/adminlte-2.3.11/dist/css/AdminLTE.min.css', 'public/backend/css/admin-lte.min.css');
     mix.copy('resources/assets/backend/adminlte-2.3.11/dist/css/skins/skin-blue.min.css', 'public/backend/css/skins/skin-blue.min.css');
     
     // Copy all required JS
+    mix.copy('resources/assets/js/jquery-1.12.4.min.js', 'public/frontend/jquery-1.12.4.min.js');
+    mix.copy('resources/assets/js/bootstrap.min.js', 'public/frontend/bootstrap.min.js');
+
     mix.copy('resources/assets/backend/adminlte-2.3.11/plugins/jQuery/jquery-2.2.3.min.js', 'public/backend/plugins/jquery/jquery-2.2.3.min.js');
     mix.copy('resources/assets/backend/adminlte-2.3.11/bootstrap/js/bootstrap.min.js', 'public/backend/bootstrap/js/bootstrap.min.js');
     mix.copy('resources/assets/backend/adminlte-2.3.11/plugins/fastclick/fastclick.js', 'public/backend/plugins/fastclick/fastclick.js');

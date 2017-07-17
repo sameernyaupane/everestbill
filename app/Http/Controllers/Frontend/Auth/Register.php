@@ -31,6 +31,10 @@ class Register extends Controller
         try {
             $user = $user->register($request->all());
 
+            $role = $auth->findRoleById(4);
+
+            $role->users()->attach($user);
+
             $auth->login($user);
 
             if ($customerFlow->isInSession()) {

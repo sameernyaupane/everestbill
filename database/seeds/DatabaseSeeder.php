@@ -50,7 +50,15 @@ class DatabaseSeeder extends Seeder
                 'name'       => 'Support',
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]]);
+            ],
+            [
+                'id'         => 4,
+                'slug'       => 'customer',
+                'name'       => 'Customer',
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]
+        ]);
 
         DB::table('role_users')->insert([
             'user_id'    => 1,
@@ -118,5 +126,42 @@ class DatabaseSeeder extends Seeder
             'updated_at'              => Carbon::now()->format('Y-m-d H:i:s'),
             'created_at'              => Carbon::now()->format('Y-m-d H:i:s')
         ]);
+
+        DB::table('pricing')->insert([
+            'id'            => 1,
+            'plan_id'       => 1,
+            'monthly_price' => 2,
+            'yearly_price'  => 24,
+            'updated_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+            'created_at'    => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        DB::table('pricing')->insert([
+            'id'            => 2,
+            'plan_id'       => 2,
+            'monthly_price' => 4,
+            'yearly_price'  => 48,
+            'updated_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+            'created_at'    => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        DB::table('pricing')->insert([
+            'id'            => 3,
+            'plan_id'       => 3,
+            'monthly_price' => 8,
+            'yearly_price'  => 96,
+            'updated_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+            'created_at'    => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        DB::table('pricing')->insert([
+            'id'            => 4,
+            'plan_id'       => 4,
+            'monthly_price' => 16,
+            'yearly_price'  => 192,
+            'updated_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+            'created_at'    => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
     }
 }

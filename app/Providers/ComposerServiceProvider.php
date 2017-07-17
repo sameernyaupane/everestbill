@@ -32,7 +32,7 @@ class ComposerServiceProvider extends ServiceProvider
             if($user = $auth->check()) {
                 $welcomeMessage = 'Welcome, ' . $user->full_name;
                 $dropdownMenu = '
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="'. route('dashboard.index') .'">Dashboard</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="'. route('logout.perform') .'">Logout</a></li>';
             } else {

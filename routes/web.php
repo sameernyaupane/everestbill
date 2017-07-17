@@ -49,10 +49,9 @@ $router->group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 
     $router->post('create-payment', 'CustomerFlow@createPayment')->name('customer_flow.create-payment');
     $router->post('execute-payment', 'CustomerFlow@executePayment')->name('customer_flow.execute-payment');
 
-    
-    $router->resource('plans', 'Plan');
-    $router->resource('users', 'User');
-    $router->resource('domains', 'User');
-
-    $router->get('checkout/api/paypal/payment/create', 'CustomerFlow@paypalPaymentCreate')->name('customer_flow.paypal_payment.create');
+    $router->group(['middleware' => 'admin'], function ($router) {
+        $router->resource('plans', 'Plan');
+        $router->resource('users', 'User');
+        $router->resource('domains', 'User');
+    });
 });
