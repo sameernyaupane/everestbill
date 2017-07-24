@@ -1,11 +1,9 @@
 <?php
 namespace EverestBill\Decorators;
 
-use Illuminate\Database\Eloquent\Collection;
-
 class Plan
 {
-    public function decorate(Collection $plans)
+    public function decorate($plans)
     {
         return $plans->each(function ($item, $key) {
             if ($item->disk_unlimited === 0) {
@@ -14,7 +12,7 @@ class Plan
                 $item->diskSpaceWithUnit = 'Unlimited';
             }
 
-            if ($item->disk_unlimited === 0) {
+            if ($item->bandwidth_unlimited === 0) {
                 $item->bandwidthWithUnit = $item->bandwidth . ' ' . $item->bandwidth_unit;
             } else {
                 $item->bandwidthWithUnit = 'Unlimited';

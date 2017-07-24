@@ -48,7 +48,7 @@ class Paypal
               "details":
               {
                 "subtotal": "2.00",
-                "tax": "2.00",
+                "tax": "2.00"
               }
             },
             "item_list":

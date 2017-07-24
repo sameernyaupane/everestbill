@@ -39,9 +39,9 @@ class SendWelcomeEmail
      * @param  UserRegistered|UserRegisteredThroughCustomerFlow  $event
      * @return void
      */
-    public function handle($event)
+    public function handle($userId)
     {
-        $user = $this->user->findById($event->userId);
+        $user = $this->user->findById($userId);
 
         $this->mail->to($user->email)->send(new Welcome($user));
     }

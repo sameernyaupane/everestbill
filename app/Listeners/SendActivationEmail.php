@@ -39,9 +39,9 @@ class SendActivationEmail
      * @param  UserRegistered  $event
      * @return void
      */
-    public function handle(UserRegistered $event)
+    public function handle($userId)
     {
-        $user = $this->user->findById($event->userId);
+        $user = $this->user->findById($userId);
 
         $user->activationCode = $user->activations()->first()->code;
 

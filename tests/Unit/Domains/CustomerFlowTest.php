@@ -24,9 +24,6 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($boolean);
     }
 
-    /**
-     * @group testing
-     */
     public function test_getAll_WhenCalledAndVariablesNotInSession_ReturnFalse()
     {
         $this->session->shouldReceive('has')->andReturn(false)->once();

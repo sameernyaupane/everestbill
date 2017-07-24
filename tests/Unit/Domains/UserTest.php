@@ -1,32 +1,150 @@
 <?php
+
 namespace Tests\Unit\Domains;
 
+use stdClass;
+use Exception;
+use Mockery as m;
 use EverestBill\Domains\User;
-
-use Cartalyst\Sentinel\Activations\IlluminateActivationRepository as Activation;
 
 class UserTest extends \PHPUnit\Framework\TestCase
 {
-    /*public function test_register_WhenCalled_ReturnUserModel()
+    public function setUp()
     {
-        $auth = $this->getMockBuilder('Cartalyst\Sentinel\Sentinel')->getMock();
+        $this->auth         = m::mock('Cartalyst\Sentinel\Sentinel');
+        $this->user         = m::mock('EverestBill\Models\User');
+        $this->event        = m::mock('Illuminate\Events\Dispatcher');
+        $this->activation   = m::mock('Cartalyst\Sentinel\Activations\IlluminateActivationRepository');
+        $this->customerFlow = m::mock('EverestBill\Domains\CustomerFlow');
 
-        $auth
-            ->expects($this->once())
-            ->method('register')->
-            will($this->returnValue(null));
+        $this->userDomain = new User(
+            $this->auth,
+            $this->user,
+            $this->event,
+            $this->activation,
+            $this->customerFlow
+        );
+    }
 
+    function tearDown()
+    {
+        m::close();
+    }
 
-        $auth = new 
+    public function test_register_WhenCalled_ReturnUserModel()
+    {
+        $data = ['email' => 'test@test.com', 'password' => 'test123'];
 
-        $userModel  = $this->getMockBuilder('UserModel')->getMock();
-        $event      = $this->getMockBuilder('Dispatcher')->getMock();
-        $activation = $this->getMockBuilder('Activation')->getMock();
+        $userObject = m::mock('Cartalyst\Sentinel\Users\UserInterface');
 
-        $data = [ 'email' => 'test@test.com', 'password' => 'test123'];
+        $userObject->id    = 1;
+        $userObject->email = $data['email'];
 
-        $user = new User($auth, $userModel, $event, $activation);
+        $this->auth
+            ->shouldReceive('register')
+            ->andReturn($userObject);
 
-        $userModel = $user->register($data);
-    }*/
+        $this->activation
+            ->shouldReceive('create')
+            ->andReturn($userObject);
+
+        $this->event
+            ->shouldReceive('fire');
+
+        $user = $this->userDomain->register($data);
+
+        $this->assertTrue(is_object($user));
+        $this->assertObjectHasAttribute('id', $user);
+        $this->assertObjectHasAttribute('email', $user);
+        $this->assertEquals(1, $user->id);
+        $this->assertEquals($data['email'], $user->email);
+    }
+
+    public function test_register_WhenCalledButDatabaseHasIssue_ThrowAnException()
+    {
+        $data = ['email' => 'test@test.com', 'password' => 'test123'];
+
+        $this->auth->shouldReceive('register')
+            ->andReturn(false);
+
+        $this->expectException(Exception::class);
+
+        $user = $this->userDomain->register($data);
+    }
+
+    public function test_findById_WhenCalledWithId_ReturnCorrectUserModel()
+    {
+        $userObject = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+
+        $userObject->id    = 1;
+        $userObject->email = 'test@test.com';
+
+        $this->auth
+            ->shouldReceive('findById')
+            ->andReturn($userObject);
+
+        $user = $this->userDomain->findById($userObject->id);
+
+        $this->assertTrue(is_object($user));
+        $this->assertObjectHasAttribute('id', $user);
+        $this->assertObjectHasAttribute('email', $user);
+        $this->assertEquals(1, $user->id);
+        $this->assertEquals($userObject->email, $user->email);
+    }
+
+    public function test_findByActivationCode_WhenCalledWithActivationCode_ReturnCorrectUserModel()
+    {
+        $userObject   = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+        $helperObject = m::mock();
+
+        $activationObject          = new stdClass();
+        $activationObject->user_id = 1;
+
+        $userObject->id    = 1;
+        $userObject->email = 'test@test.com';
+
+        $this->activation
+            ->shouldReceive('where')
+            ->andReturn($helperObject);
+
+        $helperObject
+            ->shouldReceive('first')
+            ->andReturn($activationObject);
+
+        $this->auth
+            ->shouldReceive('findById')
+            ->andReturn($userObject);
+
+        $user = $this->userDomain->findByActivationCode('test_code');
+
+        $this->assertTrue(is_object($user));
+        $this->assertObjectHasAttribute('id', $user);
+        $this->assertObjectHasAttribute('email', $user);
+        $this->assertEquals(1, $user->id);
+        $this->assertEquals($userObject->email, $user->email);
+    }
+
+    public function test_findByActivationCode_WhenCalledButActivationModelWasNotFound_ThrowAnException()
+    {
+        $userObject   = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+        $helperObject = m::mock();
+
+        $activationObject          = new stdClass();
+        $activationObject->user_id = 1;
+
+        $userObject->id    = 1;
+        $userObject->email = 'test@test.com';
+
+        $this->activation
+            ->shouldReceive('where')
+            ->andReturn($helperObject);
+
+        $helperObject
+            ->shouldReceive('first')
+            ->andReturn(null);
+
+        $this->expectException(Exception::class);
+
+        $this->userDomain->findByActivationCode('test_code');
+    }
 }

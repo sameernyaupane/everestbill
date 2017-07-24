@@ -35,7 +35,6 @@ class CustomerFlow extends Controller
         return $view->make('frontend.add_domain');
     }
 
-
     /**
      * Add the selected plan to the session
      *

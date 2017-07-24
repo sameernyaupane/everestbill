@@ -13,7 +13,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'EverestBill\Events\UserRegistered' => [
+        'user-registered' => [
             'EverestBill\Listeners\SendWelcomeEmail',
             'EverestBill\Listeners\SendActivationEmail',
         ],

@@ -4,11 +4,8 @@ namespace EverestBill\Domains;
 
 use Exception;
 use Illuminate\Events\Dispatcher;
-use EverestBill\Domains\CustomerFlow;
-use EverestBill\Events\UserRegistered;
 use Cartalyst\Sentinel\Sentinel as Auth;
 use EverestBill\Models\User as UserModel;
-use EverestBill\Events\UserRegisteredThroughCustomerFlow;
 use Cartalyst\Sentinel\Activations\IlluminateActivationRepository as Activation;
 
 class User
@@ -78,9 +75,7 @@ class User
 
         $this->activation->create($user);
 
-        $event = new UserRegistered($user->id);
-
-        $this->event->fire($event);
+        $this->event->fire('user-registered', [$user->id]);
 
         return $user;
     }

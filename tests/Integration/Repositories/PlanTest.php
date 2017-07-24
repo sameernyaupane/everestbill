@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PlanTest extends \Tests\TestCase
 {
-    //use DatabaseTransactions;
+    use DatabaseTransactions;
 
     public function setUp()
     {
@@ -17,7 +17,7 @@ class PlanTest extends \Tests\TestCase
 
     public function test_save_WhenCalledWithRequiredData_SavePlanToDatabase()
     {
-        $data = (object)[
+        $data = [
             'plan_name'               => 'Starter Package',
             'disk_space'              => 10,
             'disk_unit'               => 'GB',
@@ -29,24 +29,18 @@ class PlanTest extends \Tests\TestCase
             'addon_domains_unlimited' => 1,
         ];
 
-        $this->plan->save($data);
+        $this->plan->save((object)$data);
 
         $this->seeInDatabase('plans', [
-            'plan_name'               => 'Starter Package',
-            'disk_space'              => 10,
-            'disk_unit'               => 'GB',
-            'disk_unlimited'          => false,
-            'bandwidth'               => 100,
-            'bandwidth_unit'          => 'GB',
-            'bandwidth_unlimited'     => false,
-            'addon_domains'           => 1,
-            'addon_domains_unlimited' => 1,
+            'plan_name'               => $data['plan_name'],
+            'disk_space'              => $data['disk_space'],
+            'disk_unit'               => $data['disk_unit'],
+            'bandwidth'               => $data['bandwidth'],
+            'addon_domains'           => $data['addon_domains'],
+            'addon_domains_unlimited' => $data['addon_domains_unlimited'],
         ]);
     }
 
-    /**
-     * @group testing
-     */
     public function test_getAll_WhenCalled_GetAllPlansFromDatabase()
     {
         DB::table('plans')->insert([
