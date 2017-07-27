@@ -12,9 +12,6 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $this->plan = new Plan();
     }
 
-    /**
-     * @group testing
-     */
     public function test_decorate_WhenCalled_ReturnDecoratedCollection()
     {
         $plans = new Collection([

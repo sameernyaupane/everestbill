@@ -48,6 +48,6 @@ class PaypalTest extends \Tests\TestCase
         $this->assertTrue(is_object($result));
         $this->assertObjectHasAttribute('name', $result);
         $this->assertTrue(is_string($result->name));
-        $this->assertEquals('PAYMENT_NOT_APPROVED_FOR_EXECUTION', $result->name);
+        $this->assertEquals('INVALID_RESOURCE_ID', $result->name);
     }
 }
