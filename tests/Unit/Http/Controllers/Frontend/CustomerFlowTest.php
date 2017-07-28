@@ -51,9 +51,6 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_object($viewInstance));
     }
 
-    /**
-     * @group testing
-     */
     public function test_getLoginRegister_WhenCalled_ReturnViewInstance()
     {
         $this->view->shouldReceive('make')->andReturn(new stdClass);

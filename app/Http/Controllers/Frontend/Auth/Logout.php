@@ -5,7 +5,6 @@ namespace EverestBill\Http\Controllers\Frontend\Auth;
 use Exception;
 use Illuminate\View\Factory as View;
 use Cartalyst\Sentinel\Sentinel as Auth;
-use EverestBill\Http\Requests\LoginData;
 use EverestBill\Http\Controllers\Controller;
 use Illuminate\Routing\Redirector as Redirect;
 
@@ -17,7 +16,6 @@ class Logout extends Controller
     }
     
     public function perform(
-        LoginData $request,
         Auth $auth,
         Redirect $redirect
     )
