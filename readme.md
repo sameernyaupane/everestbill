@@ -19,4 +19,4 @@ EverestBill is an open source web host billing system that is under development 
 
 ## License
 
-EverestBill is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+EverestBill is open-sourced software licensed under the [GPL-3.0 license](https://opensource.org/licenses/GPL-3.0).
