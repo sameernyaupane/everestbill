@@ -48,9 +48,6 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_string($redirectInstance->message));
     }
 
-    /**
-     * @group testing
-     */
     public function test_perform_WhenCalledButAuthenticationFailed_ReturnRedirectInstance()
     {
         $this->redirect

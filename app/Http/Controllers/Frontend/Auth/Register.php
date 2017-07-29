@@ -102,7 +102,6 @@ class Register extends Controller
                 ->withSuccess('
                     Awesome! Please continue with your checkout.');
         } catch(Exception $e) {
-            dd($e->getMessage());
             return $redirect
                 ->back()
                 ->withInput()
