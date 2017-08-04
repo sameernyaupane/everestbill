@@ -17,13 +17,17 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./app</directory>
             <exclude>
+                <directory>./app/Events</directory>
                 <directory>./app/Models</directory>
                 <directory>./app/Console</directory>
                 <directory>./app/Providers</directory>
                 <directory>./app/Exceptions</directory>
+                <directory>./app/Http/Middleware</directory>
+                <directory>./app/Http/Requests</directory>
                 <file>./routes/web.php</file>
                 <file>./routes/api.php</file>
                 <file>./routes/console.php</file>
+                <file>./app/Http/Kernel.php</file>
             </exclude>
         </whitelist>
     </filter>

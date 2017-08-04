@@ -36,7 +36,8 @@ class SendWelcomeEmail
     /**
      * Handle the event.
      *
-     * @param  UserRegistered|UserRegisteredThroughCustomerFlow  $event
+     * @param  integer $userId
+     *
      * @return void
      */
     public function handle($userId)

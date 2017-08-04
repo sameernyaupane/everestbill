@@ -2,7 +2,6 @@
 
 namespace Tests\Integration\Repositories;
 
-use DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PaypalTest extends \Tests\TestCase

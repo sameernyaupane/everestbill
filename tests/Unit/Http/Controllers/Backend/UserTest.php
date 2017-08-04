@@ -37,9 +37,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('Illuminate\View\Factory', $view);
     }
 
-    /**
-     * @group testing
-     */
     public function test_store_WhenCalled_ReturnViewInstance()
     {
         $this->userDomain = m::mock('EverestBill\Domains\User');
