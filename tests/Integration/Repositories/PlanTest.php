@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration\Repositories;
 
 use DB;
@@ -83,5 +84,36 @@ class PlanTest extends \Tests\TestCase
             $this->assertArrayHasKey('addon_domains', $plan);
             $this->assertArrayHasKey('addon_domains_unlimited', $plan);
         }
+    }
+
+    /**
+     * @group testing
+     */
+    public function test_getById_WhenCalled_GetPlanFromDatabase()
+    {
+        DB::table('plans')->insert([
+            'id'                      => 1,
+            'plan_name'               => 'Starter Package',
+            'disk_space'              => 10,
+            'disk_unit'               => 'GB',
+            'disk_unlimited'          => false,
+            'bandwidth'               => 100,
+            'bandwidth_unit'          => 'GB',
+            'bandwidth_unlimited'     => false,
+            'addon_domains'           => 1,
+            'addon_domains_unlimited' => 1,
+        ]);
+
+        $plan = $this->plan->getById(1);
+
+        $this->assertArrayHasKey('plan_name', $plan);
+        $this->assertArrayHasKey('disk_space', $plan);
+        $this->assertArrayHasKey('disk_unit', $plan);
+        $this->assertArrayHasKey('disk_unlimited', $plan);
+        $this->assertArrayHasKey('bandwidth', $plan);
+        $this->assertArrayHasKey('bandwidth_unit', $plan);
+        $this->assertArrayHasKey('bandwidth_unlimited', $plan);
+        $this->assertArrayHasKey('addon_domains', $plan);
+        $this->assertArrayHasKey('addon_domains_unlimited', $plan);
     }
 }

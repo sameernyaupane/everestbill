@@ -34,11 +34,23 @@ class Plan
 
     /**
      * Get all the plans from the database
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getAll()
     {
         return $this->plan->all();
+    }
+
+    /**
+     * Get plan using the given plan id
+     *
+     * @param integer $planId
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getById($planId)
+    {
+        return $this->plan->find($planId);
     }
 }

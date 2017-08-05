@@ -1,10 +1,16 @@
 <?php
+
 namespace EverestBill\Adapters;
 
 use EverestBill\Translators\Paypal as PaypalTranslator;
 
 class Paypal
 {
+    /**
+     * Paypal constructor.
+     *
+     * @param PaypalTranslator $translator
+     */
     public function __construct(PaypalTranslator $translator)
     {
         $this->translator = $translator;
@@ -12,12 +18,12 @@ class Paypal
 
     /**
      * Authenticate the institution
-     * 
+     *
      * @return object
      */
     public function getAccessToken()
     {
-        $response    = $this->translator->postCurlFormData('/oauth2/token', [
+        $response = $this->translator->postCurlFormData('/oauth2/token', [
             'grant_type' => 'client_credentials',
         ]);
 
@@ -26,6 +32,13 @@ class Paypal
         return $decodedBody;
     }
 
+    /**
+     * Create payment
+     *
+     * @param string $accessToken
+     *
+     * @return mixed
+     */
     public function createPayment($accessToken)
     {
         $data = '{
@@ -78,8 +91,8 @@ class Paypal
         }';
 
         $response = $this->translator->postCurlJson(
-            '/payments/payment', 
-            $data, 
+            '/payments/payment',
+            $data,
             $accessToken
         );
 
@@ -88,6 +101,14 @@ class Paypal
         return $decodedBody;
     }
 
+    /**
+     * Execute payment
+     *
+     * @param integer $accessToken
+     * @param array $data
+     *
+     * @return mixed
+     */
     public function executePayment($accessToken, $data)
     {
         $requestData = [
@@ -95,8 +116,8 @@ class Paypal
         ];
 
         $response = $this->translator->postCurlJson(
-            '/payments/payment/' . $data['payment_id'] . '/execute', 
-            json_encode($requestData), 
+            '/payments/payment/' . $data['payment_id'] . '/execute',
+            json_encode($requestData),
             $accessToken
         );
 

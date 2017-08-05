@@ -12,7 +12,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $this->plan = new Plan();
     }
 
-    public function test_decorate_WhenCalled_ReturnDecoratedCollection()
+    public function test_decorateAll_WhenCalled_ReturnDecoratedCollection()
     {
         $plans = new Collection([
             (object)[
@@ -41,7 +41,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $decoratedPlans = $this->plan->decorate($plans);
+        $decoratedPlans = $this->plan->decorateAll($plans);
 
         $decoratedPlans->each(function ($item, $key) {
             $this->assertObjectHasAttribute('diskSpaceWithUnit', $item);
@@ -58,5 +58,33 @@ class PlanTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals('Unlimited', $item->addonDomains);
             }
         });
+    }
+
+    public function test_decorate_WhenCalled_ReturnDecoratedItem()
+    {
+        $plan = (object)[
+            'id'                      => 1,
+            'plan_name'               => 'Starter',
+            'disk_space'              => 10,
+            'disk_unit'               => 'GB',
+            'disk_unlimited'          => 0,
+            'bandwidth'               => 100,
+            'bandwidth_unit'          => 'GB',
+            'bandwidth_unlimited'     => 0,
+            'addon_domains'           => 1,
+            'addon_domains_unlimited' => 0,
+        ];
+
+        $decoratedItem = $this->plan->decorate($plan);
+
+        $this->assertObjectHasAttribute('diskSpaceWithUnit', $decoratedItem);
+        $this->assertObjectHasAttribute('bandwidthWithUnit', $decoratedItem);
+        $this->assertObjectHasAttribute('addonDomains', $decoratedItem);
+
+        $this->assertEquals(1, $decoratedItem->id);
+
+        $this->assertNotEquals('Unlimited', $decoratedItem->diskSpaceWithUnit);
+        $this->assertNotEquals('Unlimited', $decoratedItem->bandwidthWithUnit);
+        $this->assertNotEquals('Unlimited', $decoratedItem->addonDomains);
     }
 }

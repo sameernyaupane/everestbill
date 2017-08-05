@@ -59,4 +59,17 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(is_object($viewInstance));
     }
+
+    public function test_chooseBillingCycle_WhenCalled_ReturnViewInstance()
+    {
+        $planModelInstance = new stdClass();
+
+        $this->view->shouldReceive('make')->andReturn(new stdClass);
+        $this->sessionManager->shouldReceive('get')->andReturn(1);
+        $this->planDomain->shouldReceive('getById')->andReturn($planModelInstance);
+
+        $viewInstance = $this->customerFlow->chooseBillingCycle($this->view, $this->sessionManager, $this->planDomain);
+
+        $this->assertTrue(is_object($viewInstance));
+    }
 }

@@ -16,8 +16,6 @@ paypal.Button.render({
     // Wait for the payment to be authorized by the customer
     onAuthorize: function(data, actions) {
         // Make a call to the merchant server to execute the payment
-        console.log(data);
-        console.log(data.id);
         return paypal.request.post(executePaymentUrl, {
             '_token' : $('meta[name="csrf-token"]').attr('content'),
             'payment_id': data.paymentID,

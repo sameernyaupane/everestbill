@@ -23,9 +23,6 @@ class UserTest extends TestCase
         $this->userDomain = $this->app->make('EverestBill\Domains\User');
     }
 
-    /**
-     * @group testing
-     */
     public function test_register_WhenCalled_ShouldFireEvent()
     {
         $data = ['email' => 'test@test.com', 'password' => 'test123'];

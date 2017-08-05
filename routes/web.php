@@ -22,6 +22,7 @@ $router->group(['namespace' => 'Frontend'], function ($router) {
     $router->post('add-plan', 'CustomerFlow@addPlan')->name('customerflow.add.plan');
     $router->get('add-domain', 'CustomerFlow@getAddDomain')->name('customerflow.add.domain');
     $router->post('add-domain', 'CustomerFlow@addDomain');
+    $router->get('choose-billing-cycle', 'CustomerFLow@chooseBillingCycle');
     $router->get('login-register', 'CustomerFlow@getLoginRegister')->name('customerflow.login.register');
 
     // Auth Routes

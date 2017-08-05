@@ -1,4 +1,5 @@
 <?php
+
 namespace EverestBill\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
@@ -25,9 +26,9 @@ class CustomerFlow extends Controller
 
     /**
      * Display the add domain view
-     * 
-     * @param  View   $view
-     * 
+     *
+     * @param  View $view
+     *
      * @return View
      */
     public function getAddDomain(View $view)
@@ -50,13 +51,31 @@ class CustomerFlow extends Controller
 
     /**
      * Display the login/register view
-     * 
-     * @param  View   $view
-     * 
+     *
+     * @param  View $view
+     *
      * @return View
      */
     public function getLoginRegister(View $view)
     {
         return $view->make('frontend.login_register');
+    }
+
+    /**
+     *  Choose billing cycle
+     *
+     * @param View           $view
+     * @param SessionManager $session
+     * @param PlanDomain     $planDomain
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function chooseBillingCycle(View $view, SessionManager $session, PlanDomain $planDomain)
+    {
+        $planId = $session->get('plan_id');
+
+        $plan = $planDomain->getById($planId);
+
+        return $view->make('frontend.choose_billing_cycle', compact('plan'));
     }
 }

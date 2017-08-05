@@ -48,13 +48,25 @@ class Plan
 
     /**
      * Get all the plans from the database
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getAll()
     {
         $plans = $this->planRepository->getAll();
 
-        return $this->planDecorator->decorate($plans);
+        return $this->planDecorator->decorateAll($plans);
+    }
+
+    /**
+     * Get all the plans from the database
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getById($planId)
+    {
+        $plan = $this->planRepository->getById($planId);
+
+        return $this->planDecorator->decorate($plan);
     }
 }

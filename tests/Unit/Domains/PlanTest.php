@@ -30,10 +30,22 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $plans = m::mock('Illuminate\Database\Eloquent\Collection');
 
         $this->planRepository->shouldReceive('getAll')->andReturn($plans);
-        $this->planDecorator->shouldReceive('decorate')->andReturn($plans);
+        $this->planDecorator->shouldReceive('decorateAll')->andReturn($plans);
 
-        $this->plan->getAll(new stdClass());
+        $plansCollection = $this->plan->getAll(new stdClass());
 
-        $this->assertTrue(is_object($plans));
+        $this->assertTrue(is_object($plansCollection));
+    }
+
+    public function test_getById_WhenCalled_RunWithoutException()
+    {
+        $planModelInstance = new stdClass();
+
+        $this->planRepository->shouldReceive('getById')->andReturn($planModelInstance);
+        $this->planDecorator->shouldReceive('decorate')->andReturn($planModelInstance);
+
+        $planInstance = $this->plan->getById(1);
+
+        $this->assertTrue(is_object($planInstance));
     }
 }
