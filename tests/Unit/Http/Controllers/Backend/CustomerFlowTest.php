@@ -14,16 +14,6 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
         $this->customerFlow = new CustomerFlow();
     }
 
-    public function test_getAddDomain_WhenCalled_ReturnViewInstance()
-    {
-        $this->view->shouldReceive('make')->andReturnSelf();
-
-        $view = $this->customerFlow->getAddDomain($this->view);
-
-        $this->assertTrue(is_object($view));
-        $this->assertInstanceOf('Illuminate\View\Factory', $view);
-    }
-
     public function test_payment_WhenCalled_ReturnViewInstance()
     {
         $this->view->shouldReceive('make')->andReturnSelf();

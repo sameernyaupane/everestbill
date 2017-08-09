@@ -20,11 +20,21 @@
                     </ul>
                 </div>
             </div>
-            <label class="control-label">Choose billing cycle</label>
-            <select class="form-control">
-                <option>${{ $plan->pricing->monthly_price  }} Monthly</option>
-                <option>${{ $plan->pricing->yearly_price  }} Yearly</option>
-            </select>
+
+            <form method="post" action="{{ route('customerflow.choose.billing.cycle') }}">
+                {{ csrf_field() }}
+                <label class="control-label">Choose billing cycle</label>
+                <select name="billing_cycle" class="form-control">
+                    <option value="monthly">${{ $plan->pricing->monthly_price  }} Monthly</option>
+                    <option value="yearly">${{ $plan->pricing->yearly_price  }} Yearly</option>
+                </select>
+                <br clear="all">
+                <div class="form-group">
+                    <div class="col-md-12 col-md-offset-5">
+                        <input type="submit" class="btn btn-lg btn-success" value="Next">
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="col-md-4">
 

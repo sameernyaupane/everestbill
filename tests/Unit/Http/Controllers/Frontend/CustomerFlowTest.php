@@ -60,7 +60,7 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_object($viewInstance));
     }
 
-    public function test_chooseBillingCycle_WhenCalled_ReturnViewInstance()
+    public function test_getChooseBillingCycleView_WhenCalled_ReturnViewInstance()
     {
         $planModelInstance = new stdClass();
 
@@ -68,8 +68,17 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
         $this->sessionManager->shouldReceive('get')->andReturn(1);
         $this->planDomain->shouldReceive('getById')->andReturn($planModelInstance);
 
-        $viewInstance = $this->customerFlow->chooseBillingCycle($this->view, $this->sessionManager, $this->planDomain);
+        $viewInstance = $this->customerFlow->getChooseBillingCycleView($this->view, $this->sessionManager, $this->planDomain);
 
         $this->assertTrue(is_object($viewInstance));
+    }
+
+    public function test_chooseBillingCycle_WhenCalled_ReturnRedirectorInstance()
+    {
+        $this->request->billing_cycle = 'monthly';
+        $this->sessionManager->shouldReceive('put');
+        $this->redirector->shouldReceive('route');
+
+        $result = $this->customerFlow->chooseBillingCycle($this->request, $this->sessionManager, $this->redirector);
     }
 }

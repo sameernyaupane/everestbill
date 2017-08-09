@@ -37,7 +37,7 @@ class CustomerFlow extends Controller
     }
 
     /**
-     * Add the selected plan to the session
+     * Add the selected domain to the session
      *
      * @return Redirector
      */
@@ -46,7 +46,7 @@ class CustomerFlow extends Controller
         $session->put('domain_name', $request->domain_name);
         $session->put('domain_extension', $request->domain_extension);
 
-        return $redirect->route('customerflow.login.register');
+        return $redirect->route('customerflow.choose.billing.cycle');
     }
 
     /**
@@ -62,7 +62,7 @@ class CustomerFlow extends Controller
     }
 
     /**
-     *  Choose billing cycle
+     *  Display choose billing cycle view
      *
      * @param View           $view
      * @param SessionManager $session
@@ -70,12 +70,24 @@ class CustomerFlow extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function chooseBillingCycle(View $view, SessionManager $session, PlanDomain $planDomain)
+    public function getChooseBillingCycleView(View $view, SessionManager $session, PlanDomain $planDomain)
     {
         $planId = $session->get('plan_id');
 
         $plan = $planDomain->getById($planId);
 
         return $view->make('frontend.choose_billing_cycle', compact('plan'));
+    }
+
+    /**
+     * Choose billing cycle
+     *
+     * @return Redirector
+     */
+    public function chooseBillingCycle(Request $request, SessionManager $session, Redirector $redirect)
+    {
+        $session->put('billing_cycle', $request->billing_cycle);
+
+        return $redirect->route('customerflow.login.register');
     }
 }

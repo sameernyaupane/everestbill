@@ -15,18 +15,6 @@ use Illuminate\Contracts\Routing\ResponseFactory as Response;
 class CustomerFlow extends Controller
 {
     /**
-     * Display the add domain view
-     * 
-     * @param  View   $view
-     * 
-     * @return View
-     */
-    public function getAddDomain(View $view)
-    {
-        return $view->make('frontend.add_domain');
-    }
-
-    /**
      * Show the payment page
      * 
      * @param  View   $view

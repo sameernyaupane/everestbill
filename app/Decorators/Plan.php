@@ -3,6 +3,13 @@ namespace EverestBill\Decorators;
 
 class Plan
 {
+    /**
+     * Decorate the given plan collection
+     *
+     * @param object $plans
+     *
+     * @return mixed
+     */
     public function decorateAll($plans)
     {
         return $plans->each(function ($item, $key) {
@@ -10,6 +17,13 @@ class Plan
         });
     }
 
+    /**
+     * Decorate the given item
+     *
+     * @param object $item
+     *
+     * @return mixed
+     */
     public function decorate($item)
     {
         if ($item->disk_unlimited === 0) {
