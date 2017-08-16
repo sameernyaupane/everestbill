@@ -5,9 +5,12 @@ namespace Tests\Unit\Domains;
 use stdClass;
 use Mockery as m;
 use EverestBill\Domains\CustomerFlow;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class CustomerFlowTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->session  = m::mock('Illuminate\Session\SessionManager');

@@ -17,7 +17,7 @@ class CreateDomainsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->string('name');
-            $table->integer('extension');
+            $table->string('extension');
             $table->timestamps();
 
             $table->index(['user_id']);

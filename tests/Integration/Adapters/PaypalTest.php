@@ -27,7 +27,12 @@ class PaypalTest extends \Tests\TestCase
     {
         $accessTokenObject = $this->paypal->getAccessToken();
 
-        $result = $this->paypal->createPayment($accessTokenObject->access_token);
+        $data = [
+            'accessToken' => $accessTokenObject->access_token,
+            'amount'      => 4,
+        ];
+
+        $result = $this->paypal->createPayment($data);
 
         $this->assertTrue(is_object($result));
         $this->assertTrue(is_string($result->id));

@@ -4,9 +4,12 @@ namespace Tests\Unit\Http\Controllers\Backend;
 
 use Mockery as m;
 use EverestBill\Http\Controllers\Backend\User;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class UserTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->view = m::mock('Illuminate\View\Factory');
@@ -18,8 +21,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->userRepository = m::mock('EverestBill\Repositories\User');
 
-        $this->view->shouldReceive('make')->andReturnSelf();
-        $this->userRepository->shouldReceive('getAll')->andReturnSelf();
+        $this->view->shouldReceive('make')->andReturnSelf()->once();
+        $this->userRepository->shouldReceive('getAll')->andReturnSelf()->once();
 
         $view = $this->user->index($this->view, $this->userRepository);
 
@@ -29,7 +32,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     public function test_create_WhenCalled_ReturnViewInstance()
     {
-        $this->view->shouldReceive('make')->andReturnSelf();
+        $this->view->shouldReceive('make')->andReturnSelf()->once();
 
         $view = $this->user->create($this->view);
 
@@ -44,7 +47,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->redirect   = m::mock('Illuminate\Routing\Redirector');
 
         $this->userDomain->shouldReceive('store');
-        $this->redirect->shouldReceive('route')->andReturnSelf();
+        $this->redirect->shouldReceive('route')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withSuccess')

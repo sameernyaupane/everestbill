@@ -25,7 +25,7 @@ class UserTest extends \Tests\TestCase
 
     public function test_loginByInstance_WhenCalled_ReturnAllUsers()
     {
-        // Insert needed rows
+        // Insert needed row
         DB::table('users')->insert(
             [
                 'id'         => 1,

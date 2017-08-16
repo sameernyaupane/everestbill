@@ -5,9 +5,12 @@ namespace Tests\Unit\Http\Controllers\Frontend;
 use stdClass;
 use Mockery as m;
 use EverestBill\Http\Controllers\Frontend\Auth\Login;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class LoginTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->view     = m::mock('Illuminate\View\Factory');
@@ -20,26 +23,26 @@ class LoginTest extends \PHPUnit\Framework\TestCase
 
     public function test_getForm_WhenCalled_ReturnViewInstance()
     {
-        $this->view->shouldReceive('make')->andReturn(new stdClass);
+        $this->view->shouldReceive('make')->andReturn(new stdClass)->once();
 
         $viewInstance = $this->login->getForm($this->view);
 
         $this->assertTrue(is_object($viewInstance));
     }
 
-    public function test_postData_WhenCalled_ReturnRedirectInstance()
+    public function test_perform_WhenCalled_ReturnRedirectInstance()
     {
         $passedObject = m::mock();
 
         $passedObject
             ->shouldReceive('withSuccess')
-            ->andReturn(new stdClass);
+            ->andReturn(new stdClass)->once();
 
-        $this->request->shouldReceive('all')->andReturn(true);
-        $this->auth->shouldReceive('authenticate')->andReturn(true);
-        $this->redirect->shouldReceive('intended')->andReturn($passedObject);
+        $this->request->shouldReceive('all')->andReturn(true)->once();
+        $this->auth->shouldReceive('authenticate')->andReturn(true)->once();
+        $this->redirect->shouldReceive('intended')->andReturn($passedObject)->once();
 
-        $redirectInstance = $this->login->postData(
+        $redirectInstance = $this->login->perform(
             $this->request,
             $this->auth,
             $this->redirect
@@ -48,11 +51,11 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_object($redirectInstance));
     }
 
-    public function test_postData_WhenCalledButAuthenticationFailed_ReturnRedirectInstance()
+    public function test_perform_WhenCalledButAuthenticationFailed_ReturnRedirectInstance()
     {
         $this->redirect
             ->shouldReceive('withInput')
-            ->andReturnSelf();
+            ->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withError')
@@ -61,11 +64,11 @@ class LoginTest extends \PHPUnit\Framework\TestCase
                 return $this->redirect;
             });
 
-        $this->request->shouldReceive('all')->andReturn(true);
-        $this->auth->shouldReceive('authenticate')->andReturn(false);
-        $this->redirect->shouldReceive('back')->andReturnSelf();
+        $this->request->shouldReceive('all')->andReturn(true)->once();
+        $this->auth->shouldReceive('authenticate')->andReturn(false)->once();
+        $this->redirect->shouldReceive('back')->andReturnSelf()->once();
 
-        $redirectInstance = $this->login->postData(
+        $redirectInstance = $this->login->perform(
             $this->request,
             $this->auth,
             $this->redirect

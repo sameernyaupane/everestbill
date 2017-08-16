@@ -30,9 +30,9 @@ $router->group(['namespace' => 'Frontend'], function ($router) {
     $router->group(['namespace' => 'Auth'], function () {
         $this->get('login', 'Login@getForm')->name('login.index');
         $this->get('logout', 'Logout@perform')->name('logout.perform');
-        $this->post('login', 'Login@postData');
+        $this->post('login', 'Login@perform');
         $this->get('register', 'Register@getForm')->name('register.index');
-        $this->post('register', 'Register@postData');
+        $this->post('register', 'Register@perform');
         $this->get('activate/{code}', 'Register@activate')->name('register.activate');
         $this->get('complete-checkout/{code}', 'Register@completeCheckout')->name('register.complete.checkout');
     });

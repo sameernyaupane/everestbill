@@ -6,9 +6,12 @@ use stdClass;
 use Exception;
 use Mockery as m;
 use EverestBill\Domains\User;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class UserTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->auth         = m::mock('Cartalyst\Sentinel\Sentinel');
@@ -26,11 +29,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    function tearDown()
-    {
-        m::close();
-    }
-
     public function test_register_WhenCalled_ReturnUserModel()
     {
         $data = ['email' => 'test@test.com', 'password' => 'test123'];
@@ -42,11 +40,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->auth
             ->shouldReceive('register')
-            ->andReturn($userObject);
+            ->andReturn($userObject)->once();
 
         $this->activation
             ->shouldReceive('create')
-            ->andReturn($userObject);
+            ->andReturn($userObject)->once();
 
         $this->event
             ->shouldReceive('fire');
@@ -65,7 +63,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $data = ['email' => 'test@test.com', 'password' => 'test123'];
 
         $this->auth->shouldReceive('register')
-            ->andReturn(false);
+            ->andReturn(false)->once();
 
         $this->expectException(Exception::class);
 
@@ -81,7 +79,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->auth
             ->shouldReceive('findById')
-            ->andReturn($userObject);
+            ->andReturn($userObject)->once();
 
         $user = $this->userDomain->findById($userObject->id);
 
@@ -105,15 +103,15 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->activation
             ->shouldReceive('where')
-            ->andReturn($helperObject);
+            ->andReturn($helperObject)->once();
 
         $helperObject
             ->shouldReceive('first')
-            ->andReturn($activationObject);
+            ->andReturn($activationObject)->once();
 
         $this->auth
             ->shouldReceive('findById')
-            ->andReturn($userObject);
+            ->andReturn($userObject)->once();
 
         $user = $this->userDomain->findByActivationCode('test_code');
 
@@ -137,11 +135,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->activation
             ->shouldReceive('where')
-            ->andReturn($helperObject);
+            ->andReturn($helperObject)->once();
 
         $helperObject
             ->shouldReceive('first')
-            ->andReturn(null);
+            ->andReturn(null)->once();
 
         $this->expectException(Exception::class);
 

@@ -4,6 +4,7 @@ namespace Tests\Unit\Repositories;
 use Exception;
 use Mockery as m;
 use EverestBill\Repositories\Plan;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 /**
  * @runTestsInSeparateProcesses
@@ -11,6 +12,8 @@ use EverestBill\Repositories\Plan;
  */
 class PlanTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->planModel = m::mock('EverestBill\Models\Plan');
@@ -18,15 +21,13 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $this->planRepository = new Plan($this->planModel);
     }
 
-    function tearDown()
-    {
-        m::close();
-    }
-
     public function test_save_WhenCalledButDatabaseHasIssue_ThrowAnException()
     {
         $this->planModel->shouldReceive('save')
-            ->andReturn(false);
+            ->andReturn(false)->once();
+
+        $this->planModel->shouldReceive('setAttribute')
+            ->andReturn(true);
 
         $this->expectException(Exception::class);
 

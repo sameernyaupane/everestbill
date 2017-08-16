@@ -1,10 +1,12 @@
 <?php
+
 namespace EverestBill\Http\Controllers\Frontend\Auth;
 
 use Exception;
+use EverestBill\Domains\Order;
+use Illuminate\Session\SessionManager;
 use Illuminate\View\Factory as View;
 use EverestBill\Domains\CustomerFlow;
-use Illuminate\Session\SessionManager;
 use Cartalyst\Sentinel\Sentinel as Auth;
 use EverestBill\Domains\User as UserDomain;
 use EverestBill\Http\Controllers\Controller;
@@ -19,11 +21,13 @@ class Register extends Controller
     {
         return $view->make('frontend.register');
     }
-    
-    public function postData(
+
+    public function perform(
         Auth $auth,
         UserDomain $user,
         Redirect $redirect,
+        Order $orderDomain,
+        SessionManager $session,
         RegistrationData $request,
         CustomerFlow $customerFlow
     )
@@ -42,6 +46,16 @@ class Register extends Controller
                     Thanks! You are now registered and logged in. 
                     Please continue with the checkout.
                 ';
+
+                $data = [
+                    'user_id'          => $user->id,
+                    'plan_id'          => $session->get('plan_id'),
+                    'domain_name'      => $session->get('domain_name'),
+                    'domain_extension' => $session->get('domain_extension'),
+                    'billing_cycle'    => $session->get('billing_cycle'),
+                ];
+
+                $orderDomain->saveSessionItemsToDatabase($data);
             } else {
                 $message = '
                     Thanks! You are now registered.
@@ -52,18 +66,18 @@ class Register extends Controller
                 ->route('dashboard.customer_flow.payment')
                 ->withSuccess($message);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $redirect
                 ->back()
                 ->withInput()
                 ->withError($e->getMessage());
-        }      
+        }
     }
 
     public function activate(
-        $code, 
-        Redirect $redirect, 
-        UserDomain $userDomain, 
+        $code,
+        Redirect $redirect,
+        UserDomain $userDomain,
         Activation $activation
     )
     {
@@ -75,18 +89,18 @@ class Register extends Controller
                 ->route('frontend.index')
                 ->withSuccess('
                     Awesome! You are now activated. You can login now.');
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $redirect
                 ->back()
                 ->withInput()
                 ->withError('Sorry, but the activation was not successful. Please try again.');
-        } 
+        }
     }
 
     public function completeCheckout(
-        $code, 
-        Redirect $redirect, 
-        UserDomain $userDomain, 
+        $code,
+        Redirect $redirect,
+        UserDomain $userDomain,
         Activation $activation,
         UserRepository $userRepository
     )
@@ -101,11 +115,11 @@ class Register extends Controller
                 ->route('dashboard.complete_checkout')
                 ->withSuccess('
                     Awesome! Please continue with your checkout.');
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $redirect
                 ->back()
                 ->withInput()
                 ->withError('Sorry, but the activation was not successful. Please try again.');
-        } 
+        }
     }
 }

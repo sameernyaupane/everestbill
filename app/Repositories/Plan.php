@@ -1,6 +1,7 @@
 <?php
 namespace EverestBill\Repositories;
 
+use Exception;
 use EverestBill\Models\Plan as PlanModel;
 
 class Plan

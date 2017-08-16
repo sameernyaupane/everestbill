@@ -15,7 +15,7 @@ class Login extends Controller
         return $view->make('frontend.login');
     }
     
-    public function postData(
+    public function perform(
         LoginData $request,
         Auth $auth,
         Redirect $redirect

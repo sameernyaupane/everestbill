@@ -4,9 +4,12 @@ namespace Tests\Unit\Http\Controllers\Backend;
 
 use Mockery as m;
 use EverestBill\Http\Controllers\Backend\CustomerFlow;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class CustomerFlowTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->view = m::mock('Illuminate\View\Factory');
@@ -16,7 +19,7 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
 
     public function test_payment_WhenCalled_ReturnViewInstance()
     {
-        $this->view->shouldReceive('make')->andReturnSelf();
+        $this->view->shouldReceive('make')->andReturnSelf()->once();
 
         $view = $this->customerFlow->payment($this->view);
 
@@ -26,14 +29,15 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
 
     public function test_createPayment_WhenCalled_ReturnResponseInstance()
     {
-        $this->resultInstance = m::mock();
-        $this->paypal         = m::mock('EverestBill\Adapters\Paypal');
-        $this->response       = m::mock('Illuminate\Contracts\Routing\ResponseFactory');
+        $this->resultInstance  = m::mock();
+        $this->paypal          = m::mock('EverestBill\Adapters\Paypal');
+        $this->response        = m::mock('Illuminate\Contracts\Routing\ResponseFactory');
+        $this->orderRepository = m::mock('EverestBill\Repositories\Order');
 
-        $this->paypal->shouldReceive('getAccessToken')->andReturn($this->resultInstance);
-        $this->paypal->shouldReceive('createPayment')->andReturn($this->resultInstance);
+        $this->paypal->shouldReceive('getAccessToken')->andReturn($this->resultInstance)->once();
+        $this->paypal->shouldReceive('createPayment')->andReturn($this->resultInstance)->once();
 
-        $this->response->shouldReceive('json')->andReturnSelf();
+        $this->response->shouldReceive('json')->andReturnSelf()->once();
 
         $this->resultInstance->id           = 1;
         $this->resultInstance->access_token = 'test_token';
@@ -51,11 +55,11 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
         $this->paypal   = m::mock('EverestBill\Adapters\Paypal');
         $this->response = m::mock('Illuminate\Contracts\Routing\ResponseFactory');
 
-        $this->paypal->shouldReceive('getAccessToken')->andReturn($this->result);
-        $this->paypal->shouldReceive('executePayment')->andReturn($this->result);
+        $this->paypal->shouldReceive('getAccessToken')->andReturn($this->result)->once();
+        $this->paypal->shouldReceive('executePayment')->andReturn($this->result)->once();
 
         $this->request->shouldReceive('all');
-        $this->response->shouldReceive('json')->andReturnSelf();
+        $this->response->shouldReceive('json')->andReturnSelf()->once();
 
         $this->result->id           = 1;
         $this->result->access_token = 'test_token';

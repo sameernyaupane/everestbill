@@ -5,47 +5,61 @@ namespace Tests\Unit\Http\Controllers\Frontend;
 use stdClass;
 use Exception;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use EverestBill\Http\Controllers\Frontend\Auth\Register;
 
 class RegisterTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->view       = m::mock('Illuminate\View\Factory');
+        $this->userDomain = m::mock('EverestBill\Domains\User');
         $this->auth       = m::mock('Cartalyst\Sentinel\Sentinel');
         $this->redirect   = m::mock('Illuminate\Routing\Redirector');
         $this->request    = m::mock('EverestBill\Http\Requests\RegistrationData');
-        $this->userDomain = m::mock('EverestBill\Domains\User');
 
         $this->register = new Register();
     }
 
     public function test_getForm_WhenCalled_ReturnViewInstance()
     {
-        $this->view->shouldReceive('make')->andReturn(new stdClass);
+        $this->view->shouldReceive('make')->andReturn(new stdClass)->once();
 
         $viewInstance = $this->register->getForm($this->view);
 
         $this->assertTrue(is_object($viewInstance));
     }
 
+    private function prepare_perform_mocks()
+    {
+        $this->orderDomain  = m::mock('EverestBill\Domains\Order');
+        $this->customerFlow = m::mock('EverestBill\Domains\CustomerFlow');
+        $this->session      = m::mock('Illuminate\Session\SessionManager');
+    }
+
     public function test_perform_WhenCalledAndCustomerFlowIsInSession_ReturnRedirectInstance()
     {
-        $this->role         = m::mock();
-        $this->customerFlow = m::mock('EverestBill\Domains\CustomerFlow');
-        $this->user         = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+        $this->prepare_perform_mocks();
 
-        $this->role->shouldReceive('users')->andReturnSelf();
-        $this->role->shouldReceive('attach');
+        $role = m::mock();
+        $user = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+        $user->id = 1;
 
-        $this->request->shouldReceive('all')->andReturn(true);
-        $this->userDomain->shouldReceive('register')->andReturn($this->user);
-        $this->auth->shouldReceive('findRoleById')->andReturn($this->role);
-        $this->auth->shouldReceive('login');
+        $role->shouldReceive('users')->andReturnSelf()->once();
+        $role->shouldReceive('attach')->once();
 
-        $this->customerFlow->shouldReceive('isInSession')->andReturn(true);
+        $this->request->shouldReceive('all')->andReturn(true)->once();
+        $this->userDomain->shouldReceive('register')->andReturn($user)->once();
+        $this->auth->shouldReceive('findRoleById')->andReturn($role)->once();
+        $this->auth->shouldReceive('login')->once();
 
-        $this->redirect->shouldReceive('route')->andReturnSelf();
+        $this->customerFlow->shouldReceive('isInSession')
+            ->andReturn(true)
+            ->once();
+
+        $this->redirect->shouldReceive('route')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withSuccess')
@@ -54,10 +68,18 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
                 return $this->redirect;
             });
 
-        $redirectInstance = $this->register->postData(
+        $this->orderDomain
+            ->shouldReceive('saveSessionItemsToDatabase')
+            ->once();
+
+        $this->session->shouldReceive('get')->atLeast()->once();
+
+        $redirectInstance = $this->register->perform(
             $this->auth,
             $this->userDomain,
             $this->redirect,
+            $this->orderDomain,
+            $this->session,
             $this->request,
             $this->customerFlow
         );
@@ -68,21 +90,22 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     public function test_perform_WhenCalledAndCustomerFlowIsNotInSession_ReturnRedirectInstance()
     {
-        $this->role         = m::mock();
-        $this->customerFlow = m::mock('EverestBill\Domains\CustomerFlow');
-        $this->user         = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+        $this->prepare_perform_mocks();
 
-        $this->role->shouldReceive('users')->andReturnSelf();
-        $this->role->shouldReceive('attach');
+        $this->role = m::mock();
+        $this->user = m::mock('Cartalyst\Sentinel\Users\UserInterface');
 
-        $this->request->shouldReceive('all')->andReturn(true);
-        $this->userDomain->shouldReceive('register')->andReturn($this->user);
-        $this->auth->shouldReceive('findRoleById')->andReturn($this->role);
-        $this->auth->shouldReceive('login');
+        $this->role->shouldReceive('users')->andReturnSelf()->once();
+        $this->role->shouldReceive('attach')->once();
 
-        $this->customerFlow->shouldReceive('isInSession')->andReturn(false);
+        $this->request->shouldReceive('all')->andReturn(true)->once();
+        $this->userDomain->shouldReceive('register')->andReturn($this->user)->once();
+        $this->auth->shouldReceive('findRoleById')->andReturn($this->role)->once();
+        $this->auth->shouldReceive('login')->once();
 
-        $this->redirect->shouldReceive('route')->andReturnSelf();
+        $this->customerFlow->shouldReceive('isInSession')->andReturn(false)->once();
+
+        $this->redirect->shouldReceive('route')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withSuccess')
@@ -91,10 +114,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
                 return $this->redirect;
             });
 
-        $redirectInstance = $this->register->postData(
+        $redirectInstance = $this->register->perform(
             $this->auth,
             $this->userDomain,
             $this->redirect,
+            $this->orderDomain,
+            $this->session,
             $this->request,
             $this->customerFlow
         );
@@ -105,6 +130,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     public function test_perform_WhenCalledAndExceptionThrown_ReturnRedirectInstance()
     {
+        $this->prepare_perform_mocks();
+
         $this->customerFlow = m::mock('EverestBill\Domains\CustomerFlow');
 
         $this->userDomain
@@ -113,8 +140,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
                 throw new Exception();
             });
 
-        $this->redirect->shouldReceive('back')->andReturnSelf();
-        $this->redirect->shouldReceive('withInput')->andReturnSelf();
+        $this->redirect->shouldReceive('back')->andReturnSelf()->once();
+        $this->redirect->shouldReceive('withInput')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withError')
@@ -123,10 +150,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
                 return $this->redirect;
             });
 
-        $redirectInstance = $this->register->postData(
+        $redirectInstance = $this->register->perform(
             $this->auth,
             $this->userDomain,
             $this->redirect,
+            $this->orderDomain,
+            $this->session,
             $this->request,
             $this->customerFlow
         );
@@ -137,13 +166,13 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     public function test_activate_WhenCalled_ReturnRedirectInstance()
     {
-        $this->user           = m::mock('Cartalyst\Sentinel\Users\UserInterface');
-        $this->activation     = m::mock('Cartalyst\Sentinel\Activations\IlluminateActivationRepository');
+        $this->user       = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+        $this->activation = m::mock('Cartalyst\Sentinel\Activations\IlluminateActivationRepository');
 
-        $this->activation->shouldReceive('complete');
-        $this->userDomain->shouldReceive('findByActivationCode')->andReturn($this->user);
+        $this->activation->shouldReceive('complete')->once();
+        $this->userDomain->shouldReceive('findByActivationCode')->andReturn($this->user)->once();
 
-        $this->redirect->shouldReceive('route')->andReturnSelf();
+        $this->redirect->shouldReceive('route')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withSuccess')
@@ -172,8 +201,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             throw new Exception();
         });
 
-        $this->redirect->shouldReceive('back')->andReturnSelf();
-        $this->redirect->shouldReceive('withInput')->andReturnSelf();
+        $this->redirect->shouldReceive('back')->andReturnSelf()->once();
+        $this->redirect->shouldReceive('withInput')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withError')
@@ -199,11 +228,11 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $this->activation     = m::mock('Cartalyst\Sentinel\Activations\IlluminateActivationRepository');
         $this->userRepository = m::mock('EverestBill\Repositories\User');
 
-        $this->activation->shouldReceive('complete');
-        $this->userDomain->shouldReceive('findByActivationCode')->andReturn($this->user);
-        $this->userRepository->shouldReceive('loginByInstance');
+        $this->activation->shouldReceive('complete')->once();
+        $this->userDomain->shouldReceive('findByActivationCode')->andReturn($this->user)->once();
+        $this->userRepository->shouldReceive('loginByInstance')->once();
 
-        $this->redirect->shouldReceive('route')->andReturnSelf();
+        $this->redirect->shouldReceive('route')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withSuccess')
@@ -234,8 +263,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             throw new Exception();
         });
 
-        $this->redirect->shouldReceive('back')->andReturnSelf();
-        $this->redirect->shouldReceive('withInput')->andReturnSelf();
+        $this->redirect->shouldReceive('back')->andReturnSelf()->once();
+        $this->redirect->shouldReceive('withInput')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withError')

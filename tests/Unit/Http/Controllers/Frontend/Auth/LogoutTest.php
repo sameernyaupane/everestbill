@@ -5,9 +5,12 @@ namespace Tests\Unit\Http\Controllers\Frontend;
 use stdClass;
 use Mockery as m;
 use EverestBill\Http\Controllers\Frontend\Auth\Logout;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class LogoutTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->view     = m::mock('Illuminate\View\Factory');
@@ -20,7 +23,7 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
 
     public function test_getForm_WhenCalled_ReturnViewInstance()
     {
-        $this->view->shouldReceive('make')->andReturn(new stdClass);
+        $this->view->shouldReceive('make')->andReturn(new stdClass)->once();
 
         $viewInstance = $this->logout->getForm($this->view);
 
@@ -29,8 +32,8 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
 
     public function test_perform_WhenCalled_ReturnRedirectInstance()
     {
-        $this->auth->shouldReceive('logout')->andReturn(true);
-        $this->redirect->shouldReceive('intended')->andReturnSelf();
+        $this->auth->shouldReceive('logout')->andReturn(true)->once();
+        $this->redirect->shouldReceive('intended')->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withSuccess')
@@ -52,7 +55,7 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
     {
         $this->redirect
             ->shouldReceive('withInput')
-            ->andReturnSelf();
+            ->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withError')
@@ -61,8 +64,8 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
                 return $this->redirect;
             });
 
-        $this->auth->shouldReceive('logout')->andReturn(false);
-        $this->redirect->shouldReceive('back')->andReturnSelf();
+        $this->auth->shouldReceive('logout')->andReturn(false)->once();
+        $this->redirect->shouldReceive('back')->andReturnSelf()->once();
 
         $redirectInstance = $this->logout->perform(
             $this->auth,

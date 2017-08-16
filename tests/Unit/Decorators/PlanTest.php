@@ -4,9 +4,12 @@ namespace Tests\Unit\Decorators;
 
 use EverestBill\Decorators\Plan;
 use Illuminate\Support\Collection;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class PlanTest extends \PHPUnit\Framework\TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function setUp()
     {
         $this->plan = new Plan();

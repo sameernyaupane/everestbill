@@ -7,6 +7,7 @@ class User extends SentinelUser
 {
     /**
      * Fillable attributes
+     *
      * @var array
      */
     protected $fillable = [

@@ -35,13 +35,13 @@ class Paypal
     /**
      * Create payment
      *
-     * @param string $accessToken
+     * @param array $data
      *
      * @return mixed
      */
-    public function createPayment($accessToken)
+    public function createPayment($data)
     {
-        $data = '{
+        $requestData = '{
           "intent": "sale",
           "redirect_urls":
           {
@@ -56,7 +56,7 @@ class Paypal
           {
             "amount":
             {
-              "total": "4.00",
+              "total": "'. $data['amount'] .'",
               "currency": "USD",
               "details":
               {
@@ -92,8 +92,8 @@ class Paypal
 
         $response = $this->translator->postCurlJson(
             '/payments/payment',
-            $data,
-            $accessToken
+            $requestData,
+            $data['accessToken']
         );
 
         $decodedBody = json_decode($response);
