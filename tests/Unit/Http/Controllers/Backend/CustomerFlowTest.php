@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Http\Controllers\Backend;
 
+use stdClass;
 use Mockery as m;
 use EverestBill\Http\Controllers\Backend\CustomerFlow;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -40,7 +41,14 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
 
         $this->response->shouldReceive('json')->andReturnSelf()->once();
 
-        $userRepository->shouldReceive('getLatestOrderAmount')->once();
+        $order           = new stdClass;
+        $order->planName = 'Test';
+        $order->amount   = 5;
+
+        $userRepository->shouldReceive('getLatestOrder')
+            ->andReturnUsing(function () use($order) {
+                return $order;
+            })->once();
 
         $this->resultInstance->id           = 1;
         $this->resultInstance->access_token = 'test_token';

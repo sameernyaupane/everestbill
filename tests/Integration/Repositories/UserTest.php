@@ -46,7 +46,7 @@ class UserTest extends \Tests\TestCase
         $this->assertEquals($user->email, $loggedInUser->email);
     }
 
-    public function test_getLatestOrderAmount_WhenCalled_ReturnLatestOrderAmount()
+    public function test_getLatestOrder_WhenCalled_ReturnLatestOrderAmount()
     {
         /**
          * Insert needed rows
@@ -98,7 +98,7 @@ class UserTest extends \Tests\TestCase
                 'user_id'       => 1,
                 'plan_id'       => 1,
                 'domain_id'     => 1,
-                'billing_cycle' => 'Monthly',
+                'billing_cycle' => 'monthly',
                 'status'        => 'Pending',
             ]
         );
@@ -107,9 +107,9 @@ class UserTest extends \Tests\TestCase
 
         $this->user->loginByInstance($user);
 
-        $latestOrderAmount = $this->user->getLatestOrderAmount();
+        $latestOrder = $this->user->getLatestOrder();
 
-        $this->assertTrue(is_numeric($latestOrderAmount));
-        $this->assertEquals($latestOrderAmount, $pricing['monthly_price']);
+        $this->assertTrue(is_object($latestOrder));
+        $this->assertEquals($latestOrder->amount, $pricing['monthly_price']);
     }
 }

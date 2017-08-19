@@ -28,8 +28,9 @@ class PaypalTest extends \Tests\TestCase
         $accessTokenObject = $this->paypal->getAccessToken();
 
         $data = [
-            'accessToken' => $accessTokenObject->access_token,
             'amount'      => 4,
+            'planName'    => 'Test',
+            'accessToken' => $accessTokenObject->access_token,
         ];
 
         $result = $this->paypal->createPayment($data);

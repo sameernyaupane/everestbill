@@ -62,22 +62,14 @@ class Paypal
             "item_list":
             {
               "items": [
-              {
-                "quantity": "1",
-                "name": "item 1",
-                "price": "1",
-                "currency": "USD",
-                "description": "item 1 description",
-                "tax": "1"
-              },
-              {
-                "quantity": "1",
-                "name": "item 2",
-                "price": "1",
-                "currency": "USD",
-                "description": "item 2 description",
-                "tax": "1"
-              }]
+                {
+                    "quantity": "1",
+                    "name": "'. $data['planName'] .'",
+                    "price": "'. $data['amount'] .'",
+                    "currency": "USD",
+                    "description": "Shared Hosting"
+                }
+              ]
             },
             "description": "The payment transaction description.",
             "invoice_number": "merchant invoice",

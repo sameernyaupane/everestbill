@@ -60,20 +60,22 @@ class User
      *
      * @throws Exception
      */
-    public function getLatestOrderAmount()
+    public function getLatestOrder()
     {
         $user = $this->auth->getUser();
 
         $latestOrder = $user->orders()->orderBy('created_at', 'desc')->first();
 
+        $latestOrder->planName = $latestOrder->plan->plan_name;
+
         if ($latestOrder->billing_cycle == 'monthly') {
-            $amount = $latestOrder->plan->pricing->monthly_price;
+            $latestOrder->amount = $latestOrder->plan->pricing->monthly_price;
         } elseif($latestOrder->billing_cycle == 'yearly') {
-            $amount = $latestOrder->plan->pricing->yearly_price;
+            $latestOrder->amount = $latestOrder->plan->pricing->yearly_price;
         } else {
             throw new Exception('Billing cycle not found.');
         }
 
-        return $amount;
+        return $latestOrder;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace EverestBill\Http\Controllers\Backend;
 
 use Omnipay\Omnipay;
@@ -17,9 +18,9 @@ class CustomerFlow extends Controller
 {
     /**
      * Show the payment page
-     * 
-     * @param  View   $view
-     * 
+     *
+     * @param  View $view
+     *
      * @return View
      */
     public function payment(View $view)
@@ -29,34 +30,37 @@ class CustomerFlow extends Controller
 
     /**
      * Create the payment
-     * 
-     * @param  View   $view
-     * 
+     *
+     * @param  View $view
+     *
      * @return View
      */
     public function createPayment(Paypal $paypal, Response $response, UserRepository $userRepository)
     {
         $result = $paypal->getAccessToken();
 
+        $order = $userRepository->getLatestOrder();
+
         $requestData = [
+            'amount'      => $order->amount,
+            'planName'    => $order->planName,
             'accessToken' => $result->access_token,
-            'amount'      => $userRepository->getLatestOrderAmount(),
         ];
 
         $result = $paypal->createPayment($requestData);
-        
+
         $data = [
             'id' => $result->id
         ];
-        
+
         return $response->json($data);
     }
 
     /**
      * Execute the payment
-     * 
-     * @param  View   $view
-     * 
+     *
+     * @param  View $view
+     *
      * @return View
      */
     public function executePayment(Request $request, Paypal $paypal, Response $response)
@@ -68,7 +72,7 @@ class CustomerFlow extends Controller
         $data = [
             'status' => 'success'
         ];
-        
+
         return $response->json($data);
     }
 }
