@@ -33,16 +33,19 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
         $this->paypal          = m::mock('EverestBill\Adapters\Paypal');
         $this->response        = m::mock('Illuminate\Contracts\Routing\ResponseFactory');
         $this->orderRepository = m::mock('EverestBill\Repositories\Order');
+        $userRepository        = m::mock('EverestBill\Repositories\User');
 
         $this->paypal->shouldReceive('getAccessToken')->andReturn($this->resultInstance)->once();
         $this->paypal->shouldReceive('createPayment')->andReturn($this->resultInstance)->once();
 
         $this->response->shouldReceive('json')->andReturnSelf()->once();
 
+        $userRepository->shouldReceive('getLatestOrderAmount')->once();
+
         $this->resultInstance->id           = 1;
         $this->resultInstance->access_token = 'test_token';
 
-        $response = $this->customerFlow->createPayment($this->paypal, $this->response);
+        $response = $this->customerFlow->createPayment($this->paypal, $this->response, $userRepository);
 
         $this->assertTrue(is_object($response));
         $this->assertInstanceOf('Illuminate\Contracts\Routing\ResponseFactory', $response);
@@ -60,6 +63,7 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
 
         $this->request->shouldReceive('all');
         $this->response->shouldReceive('json')->andReturnSelf()->once();
+
 
         $this->result->id           = 1;
         $this->result->access_token = 'test_token';

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration\Repositories;
 
 use DB;
@@ -28,9 +29,9 @@ class UserTest extends \Tests\TestCase
         // Insert needed row
         DB::table('users')->insert(
             [
-                'id'         => 1,
-                'email'      => 'test@admin.com',
-                'password'   => 'test123'
+                'id'       => 1,
+                'email'    => 'test@admin.com',
+                'password' => 'test123'
             ]
         );
 
@@ -43,5 +44,72 @@ class UserTest extends \Tests\TestCase
         $this->assertTrue(is_object($loggedInUser));
         $this->assertEquals($user->id, $loggedInUser->id);
         $this->assertEquals($user->email, $loggedInUser->email);
+    }
+
+    public function test_getLatestOrderAmount_WhenCalled_ReturnLatestOrderAmount()
+    {
+        /**
+         * Insert needed rows
+         */
+        DB::table('users')->insert(
+            [
+                'id'       => 1,
+                'email'    => 'test@admin.com',
+                'password' => 'test123'
+            ]
+        );
+
+        DB::table('plans')->insert(
+            [
+                'id'                      => 1,
+                'plan_name'               => 'Starter Package',
+                'disk_space'              => 10,
+                'disk_unit'               => 'GB',
+                'disk_unlimited'          => false,
+                'bandwidth'               => 100,
+                'bandwidth_unit'          => 'GB',
+                'bandwidth_unlimited'     => false,
+                'addon_domains'           => 1,
+                'addon_domains_unlimited' => 1,
+            ]
+        );
+
+        $pricing = [
+            'id'            => 1,
+            'plan_id'       => 1,
+            'monthly_price' => 4,
+            'yearly_price'  => 16,
+        ];
+
+        DB::table('pricing')->insert($pricing);
+
+        DB::table('domains')->insert(
+            [
+                'id'        => 1,
+                'user_id'   => 1,
+                'name'      => 'test',
+                'extension' => 'com'
+            ]
+        );
+
+        DB::table('orders')->insert(
+            [
+                'id'            => 1,
+                'user_id'       => 1,
+                'plan_id'       => 1,
+                'domain_id'     => 1,
+                'billing_cycle' => 'Monthly',
+                'status'        => 'Pending',
+            ]
+        );
+
+        $user = $this->auth->findById(1);
+
+        $this->user->loginByInstance($user);
+
+        $latestOrderAmount = $this->user->getLatestOrderAmount();
+
+        $this->assertTrue(is_numeric($latestOrderAmount));
+        $this->assertEquals($latestOrderAmount, $pricing['monthly_price']);
     }
 }

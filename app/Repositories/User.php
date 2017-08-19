@@ -3,6 +3,7 @@ namespace EverestBill\Repositories;
 
 use Cartalyst\Sentinel\Sentinel as Auth;
 use EverestBill\Models\User as UserModel;
+use League\Flysystem\Exception;
 
 class User
 {
@@ -50,5 +51,29 @@ class User
     public function loginByInstance($user)
     {
         $this->auth->login($user);
+    }
+
+    /**
+     * Get the latest order amount of the current logged in user
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function getLatestOrderAmount()
+    {
+        $user = $this->auth->getUser();
+
+        $latestOrder = $user->orders()->orderBy('created_at', 'desc')->first();
+
+        if ($latestOrder->billing_cycle == 'monthly') {
+            $amount = $latestOrder->plan->pricing->monthly_price;
+        } elseif($latestOrder->billing_cycle == 'yearly') {
+            $amount = $latestOrder->plan->pricing->yearly_price;
+        } else {
+            throw new Exception('Billing cycle not found.');
+        }
+
+        return $amount;
     }
 }

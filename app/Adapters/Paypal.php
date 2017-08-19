@@ -57,12 +57,7 @@ class Paypal
             "amount":
             {
               "total": "'. $data['amount'] .'",
-              "currency": "USD",
-              "details":
-              {
-                "subtotal": "2.00",
-                "tax": "2.00"
-              }
+              "currency": "USD"
             },
             "item_list":
             {

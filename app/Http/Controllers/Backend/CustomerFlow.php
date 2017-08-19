@@ -10,6 +10,7 @@ use Illuminate\Session\SessionManager;
 use EverestBill\Domains\Plan as PlanDomain;
 use EverestBill\Http\Controllers\Controller;
 use EverestBill\Repositories\Plan as PlanRepository;
+use EverestBill\Repositories\User as UserRepository;
 use Illuminate\Contracts\Routing\ResponseFactory as Response;
 
 class CustomerFlow extends Controller
@@ -33,12 +34,17 @@ class CustomerFlow extends Controller
      * 
      * @return View
      */
-    public function createPayment(Paypal $paypal, Response $response)
+    public function createPayment(Paypal $paypal, Response $response, UserRepository $userRepository)
     {
         $result = $paypal->getAccessToken();
 
-        $result = $paypal->createPayment($result->access_token);
+        $requestData = [
+            'accessToken' => $result->access_token,
+            'amount'      => $userRepository->getLatestOrderAmount(),
+        ];
 
+        $result = $paypal->createPayment($requestData);
+        
         $data = [
             'id' => $result->id
         ];

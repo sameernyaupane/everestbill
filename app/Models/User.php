@@ -16,4 +16,12 @@ class User extends SentinelUser
         'full_name',
         'permissions',
     ];
+
+    /**
+     * Get the plan associated with the order.
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
 }
