@@ -23,7 +23,7 @@ class Order
         $this->order->plan_id       = $data['plan_id'];
         $this->order->domain_id     = $data['domain_id'];
         $this->order->billing_cycle = $data['billing_cycle'];
-        $this->order->status        = $data['billing_cycle'];
+        $this->order->status        = 'Pending';
 
         if (!$this->order->save()) {
             throw new Exception('Unable to save data to the database');

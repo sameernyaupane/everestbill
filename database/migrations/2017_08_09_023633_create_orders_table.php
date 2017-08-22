@@ -22,7 +22,7 @@ class CreateOrdersTable extends Migration
             $table->string('status');
             $table->timestamps();
 
-            $table->index(['user_id', 'plan_id']);
+            $table->index(['user_id', 'plan_id', 'domain_id']);
 
             $table->foreign('user_id')
                 ->references('id')->on('users')
