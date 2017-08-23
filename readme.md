@@ -25,7 +25,7 @@ EverestBill is an open source web host billing system that is under development 
 ## Test Coverage
 
 
-![Image](coverage.png)
+![Image](https://github.com/sameernyaupane/everestbill/blob/master/coverage.png)
 
 ## License
 
