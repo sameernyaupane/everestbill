@@ -3,19 +3,29 @@
 
 EverestBill is an open source web host billing system that is under development currently. First we're aiming for a shared hosting automation. Paypal is integrated and a simple flow is also complete.
 
+## Tech Stack
+
+1. HTML5, CSS3, Javascript, Jquery, Bootstrap v3
+2. PHP 7, Laravel 5.3
+3. PHPUnit, Mockery
+
 ## Completed Features
 
 1. Shared Hosting order flow
 2. Paypal integration
 3. Backend interface
+4. Add different payment cycles
 
 ## To Do
 
-1. Add different payment cycles
-2. Integrate Cpanel
-3. Add ticketing system
-4. Add Reporting features
+1. Integrate Cpanel
+2. Add ticketing system
+3. Add reporting features
 
+## Test Coverage
+
+
+![Image](coverage.png)
 
 ## License
 
