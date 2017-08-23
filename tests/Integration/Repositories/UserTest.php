@@ -3,6 +3,7 @@
 namespace Tests\Integration\Repositories;
 
 use DB;
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends \Tests\TestCase
@@ -46,7 +47,7 @@ class UserTest extends \Tests\TestCase
         $this->assertEquals($user->email, $loggedInUser->email);
     }
 
-    public function test_getLatestOrder_WhenCalled_ReturnLatestOrderAmount()
+    public function test_getLatestOrder_WhenCalledHavingMonthlyBillingCycle_ReturnLatestOrderAmount()
     {
         /**
          * Insert needed rows
@@ -111,5 +112,138 @@ class UserTest extends \Tests\TestCase
 
         $this->assertTrue(is_object($latestOrder));
         $this->assertEquals($latestOrder->amount, $pricing['monthly_price']);
+    }
+
+    public function test_getLatestOrder_WhenCalledHavingYearlyBillingCycle_ReturnLatestOrderAmount()
+    {
+        /**
+         * Insert needed rows
+         */
+        DB::table('users')->insert(
+            [
+                'id'       => 1,
+                'email'    => 'test@admin.com',
+                'password' => 'test123'
+            ]
+        );
+
+        DB::table('plans')->insert(
+            [
+                'id'                      => 1,
+                'plan_name'               => 'Starter Package',
+                'disk_space'              => 10,
+                'disk_unit'               => 'GB',
+                'disk_unlimited'          => false,
+                'bandwidth'               => 100,
+                'bandwidth_unit'          => 'GB',
+                'bandwidth_unlimited'     => false,
+                'addon_domains'           => 1,
+                'addon_domains_unlimited' => 1,
+            ]
+        );
+
+        $pricing = [
+            'id'            => 1,
+            'plan_id'       => 1,
+            'monthly_price' => 4,
+            'yearly_price'  => 16,
+        ];
+
+        DB::table('pricing')->insert($pricing);
+
+        DB::table('domains')->insert(
+            [
+                'id'        => 1,
+                'user_id'   => 1,
+                'name'      => 'test',
+                'extension' => 'com'
+            ]
+        );
+
+        DB::table('orders')->insert(
+            [
+                'id'            => 1,
+                'user_id'       => 1,
+                'plan_id'       => 1,
+                'domain_id'     => 1,
+                'billing_cycle' => 'yearly',
+                'status'        => 'Pending',
+            ]
+        );
+
+        $user = $this->auth->findById(1);
+
+        $this->user->loginByInstance($user);
+
+        $latestOrder = $this->user->getLatestOrder();
+
+        $this->assertTrue(is_object($latestOrder));
+        $this->assertEquals($latestOrder->amount, $pricing['yearly_price']);
+    }
+
+    public function test_getLatestOrder_WhenCalledHavingUnknownBillingCycle_ThrowAnException()
+    {
+        /**
+         * Insert needed rows
+         */
+        DB::table('users')->insert(
+            [
+                'id'       => 1,
+                'email'    => 'test@admin.com',
+                'password' => 'test123'
+            ]
+        );
+
+        DB::table('plans')->insert(
+            [
+                'id'                      => 1,
+                'plan_name'               => 'Starter Package',
+                'disk_space'              => 10,
+                'disk_unit'               => 'GB',
+                'disk_unlimited'          => false,
+                'bandwidth'               => 100,
+                'bandwidth_unit'          => 'GB',
+                'bandwidth_unlimited'     => false,
+                'addon_domains'           => 1,
+                'addon_domains_unlimited' => 1,
+            ]
+        );
+
+        $pricing = [
+            'id'            => 1,
+            'plan_id'       => 1,
+            'monthly_price' => 4,
+            'yearly_price'  => 16,
+        ];
+
+        DB::table('pricing')->insert($pricing);
+
+        DB::table('domains')->insert(
+            [
+                'id'        => 1,
+                'user_id'   => 1,
+                'name'      => 'test',
+                'extension' => 'com'
+            ]
+        );
+
+        DB::table('orders')->insert(
+            [
+                'id'            => 1,
+                'user_id'       => 1,
+                'plan_id'       => 1,
+                'domain_id'     => 1,
+                'billing_cycle' => '',
+                'status'        => 'Pending',
+            ]
+        );
+
+        $user = $this->auth->findById(1);
+
+        $this->user->loginByInstance($user);
+
+        $this->expectException(Exception::class);
+
+        $this->user->getLatestOrder();
     }
 }
