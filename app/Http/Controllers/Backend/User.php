@@ -11,9 +11,12 @@ use EverestBill\Repositories\User as UserRepository;
 class User extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show list of users
      *
-     * @return \Illuminate\Http\Response
+     * @param View           $view
+     * @param UserRepository $userRepository
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(View $view, UserRepository $userRepository)
     {
@@ -23,9 +26,11 @@ class User extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new user.
      *
-     * @return \Illuminate\Http\Response
+     * @param View $view
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function create(View $view)
     {
@@ -33,12 +38,13 @@ class User extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store the new user
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  UserDomain                $user
-     * 
-     * @return \Illuminate\Http\Response
+     * @param Request    $request
+     * @param Redirector $redirect
+     * @param UserDomain $user
+     *
+     * @return mixed
      */
     public function store(Request $request, Redirector $redirect, UserDomain $user)
     {

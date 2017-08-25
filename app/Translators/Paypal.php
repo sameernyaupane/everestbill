@@ -7,6 +7,13 @@ use GuzzleHttp\Exception\RequestException;
 class Paypal
 {
     /**
+     * URL
+     *
+     * @var string
+     */
+    private $url;
+
+    /**
      * Client instance
      *
      * @var Client
@@ -28,7 +35,7 @@ class Paypal
     private $secret;
 
     /**
-     * Plaid constructor.
+     * Paypal Translator constructor.
      */
     public function __construct()
     {
@@ -45,6 +52,13 @@ class Paypal
         ]);
     }
 
+    /**
+     * Post form data through curl
+     *
+     * @param $uri
+     * @param $params
+     * @return mixed
+     */
     public function postCurlFormData($uri, $params)
     {
         $ch = curl_init();
@@ -65,15 +79,19 @@ class Paypal
 
         $response = curl_exec($ch);
 
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
-        }
-
         curl_close($ch);
 
         return $response;
     }
 
+    /**
+     * Post json data through curl
+     *
+     * @param      $uri
+     * @param      $data
+     * @param null $accessToken
+     * @return mixed
+     */
     public function postCurlJson($uri, $data, $accessToken = null)
     {
         $ch = curl_init();
@@ -93,10 +111,6 @@ class Paypal
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
-        }
 
         curl_close($ch);
 

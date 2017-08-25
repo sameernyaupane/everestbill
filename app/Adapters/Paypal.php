@@ -7,7 +7,7 @@ use EverestBill\Translators\Paypal as PaypalTranslator;
 class Paypal
 {
     /**
-     * Paypal constructor.
+     * Paypal Adapter constructor.
      *
      * @param PaypalTranslator $translator
      */

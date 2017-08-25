@@ -11,9 +11,12 @@ use EverestBill\Repositories\Plan as PlanRepository;
 class Plan extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show list of plans
      *
-     * @return \Illuminate\Http\Response
+     * @param View       $view
+     * @param PlanDomain $planDomain
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(View $view, PlanDomain $planDomain)
     {
@@ -25,7 +28,9 @@ class Plan extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param View $view
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function create(View $view)
     {
@@ -33,12 +38,13 @@ class Plan extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store new plan
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  PlanDomain                $plan
-     * 
-     * @return \Illuminate\Http\Response
+     * @param Request    $request
+     * @param Redirector $redirect
+     * @param PlanDomain $plan
+     *
+     * @return mixed
      */
     public function store(Request $request, Redirector $redirect, PlanDomain $plan)
     {

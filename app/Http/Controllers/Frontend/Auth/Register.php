@@ -17,11 +17,31 @@ use Cartalyst\Sentinel\Activations\IlluminateActivationRepository as Activation;
 
 class Register extends Controller
 {
+    /**
+     * Show the register form
+     *
+     * @param View $view
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getForm(View $view)
     {
         return $view->make('frontend.register');
     }
 
+    /**
+     * Perform the register request
+     *
+     * @param Auth             $auth
+     * @param UserDomain       $user
+     * @param Redirect         $redirect
+     * @param Order            $orderDomain
+     * @param SessionManager   $session
+     * @param RegistrationData $request
+     * @param CustomerFlow     $customerFlow
+     *
+     * @return mixed
+     */
     public function perform(
         Auth $auth,
         UserDomain $user,
@@ -74,6 +94,16 @@ class Register extends Controller
         }
     }
 
+    /**
+     * Activate the user
+     *
+     * @param            $code
+     * @param Redirect   $redirect
+     * @param UserDomain $userDomain
+     * @param Activation $activation
+     *
+     * @return mixed
+     */
     public function activate(
         $code,
         Redirect $redirect,
@@ -97,6 +127,17 @@ class Register extends Controller
         }
     }
 
+    /**
+     * Complete the checkout process
+     *
+     * @param                $code
+     * @param Redirect       $redirect
+     * @param UserDomain     $userDomain
+     * @param Activation     $activation
+     * @param UserRepository $userRepository
+     *
+     * @return mixed
+     */
     public function completeCheckout(
         $code,
         Redirect $redirect,

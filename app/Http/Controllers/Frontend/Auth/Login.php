@@ -10,11 +10,27 @@ use Illuminate\Routing\Redirector as Redirect;
 
 class Login extends Controller
 {
+    /**
+     * Get the login form
+     *
+     * @param View $view
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getForm(View $view)
     {
         return $view->make('frontend.login');
     }
-    
+
+    /**
+     * Perform the login request
+     *
+     * @param LoginData $request
+     * @param Auth      $auth
+     * @param Redirect  $redirect
+     *
+     * @return mixed
+     */
     public function perform(
         LoginData $request,
         Auth $auth,

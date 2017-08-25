@@ -15,7 +15,11 @@ class CustomerFlow extends Controller
     /**
      * Add the selected plan to the session
      *
-     * @return Redirector
+     * @param Request        $request
+     * @param SessionManager $session
+     * @param Redirector     $redirect
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function addPlan(Request $request, SessionManager $session, Redirector $redirect)
     {
@@ -39,7 +43,11 @@ class CustomerFlow extends Controller
     /**
      * Add the selected domain to the session
      *
-     * @return Redirector
+     * @param Request        $request
+     * @param SessionManager $session
+     * @param Redirector     $redirect
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function addDomain(Request $request, SessionManager $session, Redirector $redirect)
     {
@@ -80,9 +88,13 @@ class CustomerFlow extends Controller
     }
 
     /**
-     * Choose billing cycle
+     * Choose the billing cycle
      *
-     * @return Redirector
+     * @param Request        $request
+     * @param SessionManager $session
+     * @param Redirector     $redirect
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function chooseBillingCycle(Request $request, SessionManager $session, Redirector $redirect)
     {

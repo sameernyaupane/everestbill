@@ -11,9 +11,12 @@ use EverestBill\Repositories\Plan as PlanRepository;
 class Plan extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show list of plans
      *
-     * @return \Illuminate\Http\Response
+     * @param View       $view
+     * @param PlanDomain $planDomain
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(View $view, PlanDomain $planDomain)
     {

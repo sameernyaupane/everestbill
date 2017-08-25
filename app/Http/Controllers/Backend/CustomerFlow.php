@@ -31,9 +31,11 @@ class CustomerFlow extends Controller
     /**
      * Create the payment
      *
-     * @param  View $view
+     * @param Paypal         $paypal
+     * @param Response       $response
+     * @param UserRepository $userRepository
      *
-     * @return View
+     * @return \Illuminate\Http\JsonResponse
      */
     public function createPayment(Paypal $paypal, Response $response, UserRepository $userRepository)
     {
@@ -59,9 +61,10 @@ class CustomerFlow extends Controller
     /**
      * Execute the payment
      *
-     * @param  View $view
-     *
-     * @return View
+     * @param Request  $request
+     * @param Paypal   $paypal
+     * @param Response $response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function executePayment(Request $request, Paypal $paypal, Response $response)
     {
