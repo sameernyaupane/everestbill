@@ -7,34 +7,6 @@ use GuzzleHttp\Exception\RequestException;
 class Paypal
 {
     /**
-     * URL
-     *
-     * @var string
-     */
-    private $url;
-
-    /**
-     * Client instance
-     *
-     * @var Client
-     */
-    private $client;
-
-    /**
-     * Client id
-     *
-     * @var string
-     */
-    private $clientId;
-
-    /**
-     * Secret
-     *
-     * @var string
-     */
-    private $secret;
-
-    /**
      * Paypal Translator constructor.
      */
     public function __construct()
@@ -42,14 +14,6 @@ class Paypal
         $this->url      = config('paypal.url');
         $this->clientId = config('paypal.clientId');
         $this->secret   = config('paypal.secret');
-
-        $this->client   = new Client([
-            // Base URI is used with relative requests
-            'base_uri' => config('paypal.url'),
-            // You can set any number of default request options.
-            'timeout'  => 10.0,
-            'verify'   => false
-        ]);
     }
 
     /**
