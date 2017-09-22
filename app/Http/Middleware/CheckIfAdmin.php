@@ -5,7 +5,7 @@ use Closure;
 use EverestBill\Models\User;
 use Cartalyst\Sentinel\Sentinel;
 
-class Authenticate
+class CheckIfAdmin
 {
     /**
      * Sentinel instance
@@ -35,8 +35,11 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($user = $this->auth->guest()) {
-            return redirect()->guest(route('login.index'));
+        $user = $this->auth->getUser();
+
+        if (!$user->inRole(1)) {
+            return redirect()->route('dashboard.index')
+                ->withError('Sorry, you do not have the role or the permission to access this resource.');
         }
 
         return $next($request);

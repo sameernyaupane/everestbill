@@ -42,7 +42,7 @@ $router->group(['namespace' => 'Frontend'], function ($router) {
 /**
  * Register Backend Routes
  */
-$router->group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'Backend'], function ($router) {
+$router->group(['prefix' => 'dashboard', 'middleware' => 'checkIfLoggedIn', 'namespace' => 'Backend'], function ($router) {
 
     $router->get('/', 'Dashboard@index')->name('dashboard.index');
 

@@ -36,6 +36,11 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
+
+        'admin' => [
+            'checkIfLoggedIn',
+            'checkifAdmin'
+        ]
     ];
 
     /**
@@ -46,11 +51,12 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'       => \EverestBill\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings'   => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can'        => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'      => \EverestBill\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'checkIfLoggedIn' => \EverestBill\Http\Middleware\CheckIfLoggedIn::class,
+        'checkifAdmin'    => \EverestBill\Http\Middleware\CheckIfAdmin::class,
+        'auth.basic'      => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'bindings'        => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'can'             => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'           => \EverestBill\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'        => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }
