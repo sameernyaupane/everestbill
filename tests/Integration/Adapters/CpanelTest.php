@@ -16,7 +16,7 @@ class CpanelTest extends TestCase
     public function test_createCpanelAccount_WhenCalled_ShouldReceiveSuccessMessage()
     {
         $response = $this->cpanel->createCpanelAccount();
-        
+
         $this->assertTrue(is_object($response));
         $this->assertObjectHasAttribute('metadata', $response);
 

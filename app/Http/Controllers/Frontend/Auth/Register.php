@@ -4,9 +4,9 @@ namespace EverestBill\Http\Controllers\Frontend\Auth;
 
 use Exception;
 use EverestBill\Domains\Order;
-use Illuminate\Session\SessionManager;
 use Illuminate\View\Factory as View;
 use EverestBill\Domains\CustomerFlow;
+use Illuminate\Session\SessionManager;
 use Cartalyst\Sentinel\Sentinel as Auth;
 use EverestBill\Domains\User as UserDomain;
 use EverestBill\Http\Controllers\Controller;
@@ -76,15 +76,17 @@ class Register extends Controller
                 ];
 
                 $orderDomain->saveSessionItemsToDatabase($data);
-            } else {
-                $message = '
-                    Thanks! You are now registered.
-                ';
-            }
 
-            return $redirect
-                ->route('dashboard.customer_flow.payment')
-                ->withSuccess($message);
+                return $redirect
+                    ->route('dashboard.customer_flow.payment')
+                    ->withSuccess($message);
+            } else {
+                $message = 'Thanks! You are now registered.';
+
+                return $redirect
+                    ->route('dashboard.index')
+                    ->withSuccess($message);
+            }
 
         } catch (Exception $e) {
             return $redirect

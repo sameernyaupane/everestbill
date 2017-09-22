@@ -2,41 +2,25 @@
 
 namespace EverestBill\Translators;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-
 class Cpanel
 {
     /**
-     * URL
-     *
      * @var string
      */
     private $url;
 
     /**
-     * Client instance
-     *
-     * @var Client
-     */
-    private $client;
-
-    /**
-     * Client id
-     *
      * @var string
      */
-    private $clientId;
+    private $userName;
 
     /**
-     * Secret
-     *
      * @var string
      */
-    private $secret;
+    private $apiToken;
 
     /**
-     * Paypal Translator constructor.
+     * Cpanel Translator constructor.
      */
     public function __construct()
     {

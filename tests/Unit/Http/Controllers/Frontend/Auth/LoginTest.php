@@ -21,6 +21,13 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->login = new Login();
     }
 
+    private function prepare_perform_mocks()
+    {
+        $this->orderDomain  = m::mock('EverestBill\Domains\Order');
+        $this->customerFlow = m::mock('EverestBill\Domains\CustomerFlow');
+        $this->session      = m::mock('Illuminate\Session\SessionManager');
+    }
+
     public function test_getForm_WhenCalled_ReturnViewInstance()
     {
         $this->view->shouldReceive('make')->andReturn(new stdClass)->once();
@@ -30,8 +37,10 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_object($viewInstance));
     }
 
-    public function test_perform_WhenCalled_ReturnRedirectInstance()
+    public function test_perform_WhenCalledAndCustomerFlowIsInSession_ReturnRedirectInstance()
     {
+        $this->prepare_perform_mocks();
+
         $passedObject = m::mock();
 
         $passedObject
@@ -42,10 +51,48 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->auth->shouldReceive('authenticate')->andReturn(true)->once();
         $this->redirect->shouldReceive('intended')->andReturn($passedObject)->once();
 
+        $this->customerFlow->shouldReceive('isInSession')
+            ->andReturn(true)
+            ->once();
+
         $redirectInstance = $this->login->perform(
             $this->request,
             $this->auth,
-            $this->redirect
+            $this->redirect,
+            $this->orderDomain,
+            $this->session,
+            $this->customerFlow
+        );
+
+        $this->assertTrue(is_object($redirectInstance));
+    }
+
+
+    public function test_perform_WhenCalledAndCustomerFlowIsNotInSession_ReturnRedirectInstance()
+    {
+        $this->prepare_perform_mocks();
+
+        $passedObject = m::mock();
+
+        $passedObject
+            ->shouldReceive('withSuccess')
+            ->andReturn(new stdClass)->once();
+
+        $this->request->shouldReceive('all')->andReturn(true)->once();
+        $this->auth->shouldReceive('authenticate')->andReturn(true)->once();
+        $this->redirect->shouldReceive('intended')->andReturn($passedObject)->once();
+
+        $this->customerFlow->shouldReceive('isInSession')
+            ->andReturn(false)
+            ->once();
+
+        $redirectInstance = $this->login->perform(
+            $this->request,
+            $this->auth,
+            $this->redirect,
+            $this->orderDomain,
+            $this->session,
+            $this->customerFlow
         );
 
         $this->assertTrue(is_object($redirectInstance));
