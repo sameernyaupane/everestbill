@@ -54,6 +54,6 @@ $router->group(['prefix' => 'dashboard', 'middleware' => 'checkIfLoggedIn', 'nam
     $router->group(['middleware' => 'admin'], function ($router) {
         $router->resource('plans', 'Plan');
         $router->resource('users', 'User');
-        $router->resource('domains', 'User');
+        $router->resource('domains', 'Domain');
     });
 });

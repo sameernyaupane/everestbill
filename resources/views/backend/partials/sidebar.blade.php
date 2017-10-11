@@ -33,7 +33,7 @@
       </a>
       <ul class="treeview-menu">
         <li class="active"><a href="{{ route('plans.index') }}"><i class="fa fa-circle-o"></i> Plans</a></li>
-        <li ><a href="#"><i class="fa fa-circle-o"></i> Domains</a></li>
+        <li ><a href="{{ route('domains.index') }}"><i class="fa fa-circle-o"></i> Domains</a></li>
       </ul>
     </li>
     <li class="treeview">

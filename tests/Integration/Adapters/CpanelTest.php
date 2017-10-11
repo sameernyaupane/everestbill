@@ -13,7 +13,7 @@ class CpanelTest extends TestCase
         $this->cpanel = $this->app->make(\EverestBill\Adapters\Cpanel::class);
     }
 
-    public function test_createCpanelAccount_WhenCalled_ShouldReceiveSuccessMessage()
+    /*public function test_createCpanelAccount_WhenCalled_ShouldReceiveSuccessMessage()
     {
         $response = $this->cpanel->createCpanelAccount();
 
@@ -24,5 +24,5 @@ class CpanelTest extends TestCase
         $this->assertObjectHasAttribute('result', $response->metadata);
 
         $this->assertEquals(1, $response->metadata->result);
-    }
+    }*/
 }

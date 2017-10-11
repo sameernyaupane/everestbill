@@ -59,7 +59,7 @@ class Plan
     }
 
     /**
-     * Get all the plans from the database
+     * Get a plan by id from the database
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */

@@ -74,7 +74,7 @@ class Login extends Controller
 
             } else {
                 throw new Exception(
-                    'An error occured while registering. Please try again.'
+                    'Login details incorrect. Please try again.'
                 );
             }
         } catch(Exception $e) {
@@ -82,6 +82,6 @@ class Login extends Controller
                 ->back()
                 ->withInput()
                 ->withError($e->getMessage());
-        } 
+        }
     }
 }

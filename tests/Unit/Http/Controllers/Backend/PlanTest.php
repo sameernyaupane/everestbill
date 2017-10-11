@@ -3,10 +3,11 @@
 namespace Tests\Unit\Http\Controllers\Backend;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use EverestBill\Http\Controllers\Backend\Plan;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-class PlanTest extends \PHPUnit\Framework\TestCase
+class PlanTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

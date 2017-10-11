@@ -29,4 +29,9 @@ class Domain
 
         return $this->domain->id;
     }
+
+    public function getAll()
+    {
+        return $this->domain->all();
+    }
 }

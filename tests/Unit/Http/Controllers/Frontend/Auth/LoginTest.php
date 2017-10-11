@@ -41,15 +41,21 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     {
         $this->prepare_perform_mocks();
 
+        $user         = m::mock();
         $passedObject = m::mock();
+
+        $user->id = 1;
 
         $passedObject
             ->shouldReceive('withSuccess')
             ->andReturn(new stdClass)->once();
 
         $this->request->shouldReceive('all')->andReturn(true)->once();
-        $this->auth->shouldReceive('authenticate')->andReturn(true)->once();
-        $this->redirect->shouldReceive('intended')->andReturn($passedObject)->once();
+        $this->auth->shouldReceive('authenticate')->andReturn($user)->once();
+        $this->redirect->shouldReceive('route')->andReturn($passedObject)->once();
+        $this->session->shouldReceive('get')->andReturn('')->times(4);
+
+        $this->orderDomain->shouldReceive('saveSessionItemsToDatabase')->once();
 
         $this->customerFlow->shouldReceive('isInSession')
             ->andReturn(true)
@@ -66,7 +72,6 @@ class LoginTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(is_object($redirectInstance));
     }
-
 
     public function test_perform_WhenCalledAndCustomerFlowIsNotInSession_ReturnRedirectInstance()
     {
@@ -100,13 +105,15 @@ class LoginTest extends \PHPUnit\Framework\TestCase
 
     public function test_perform_WhenCalledButAuthenticationFailed_ReturnRedirectInstance()
     {
+        $this->prepare_perform_mocks();
+
         $this->redirect
             ->shouldReceive('withInput')
             ->andReturnSelf()->once();
 
         $this->redirect
             ->shouldReceive('withError')
-            ->andReturnUsing(function($message) {
+            ->andReturnUsing(function ($message) {
                 $this->redirect->message = $message;
                 return $this->redirect;
             });
@@ -118,7 +125,10 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $redirectInstance = $this->login->perform(
             $this->request,
             $this->auth,
-            $this->redirect
+            $this->redirect,
+            $this->orderDomain,
+            $this->session,
+            $this->customerFlow
         );
 
         $this->assertTrue(is_object($redirectInstance));
