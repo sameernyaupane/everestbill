@@ -15,14 +15,14 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
     {
         $this->session  = m::mock('Illuminate\Session\SessionManager');
 
-        $this->customerFLow = new CustomerFlow($this->session);
+        $this->customerFlow = new CustomerFlow($this->session);
     }
 
     public function test_getAll_WhenCalled_ReturnTrue()
     {
         $this->session->shouldReceive('has')->andReturn(true)->times(3);
 
-        $boolean = $this->customerFLow->isInSession();
+        $boolean = $this->customerFlow->isInSession();
 
         $this->assertTrue($boolean);
     }
@@ -31,7 +31,7 @@ class CustomerFlowTest extends \PHPUnit\Framework\TestCase
     {
         $this->session->shouldReceive('has')->andReturn(false)->once();
 
-        $boolean = $this->customerFLow->isInSession();
+        $boolean = $this->customerFlow->isInSession();
 
         $this->assertFalse($boolean);
     }
